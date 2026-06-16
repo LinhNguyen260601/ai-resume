@@ -1,0 +1,27 @@
+{
+  "projectName": "ai-resume",
+  "mode": "file-router",
+  "typescript": true,
+  "packageManager": "bun",
+  "includeExamples": false,
+  "tailwind": true,
+  "addOnOptions": {
+    "drizzle": {
+      "database": "postgresql"
+    }
+  },
+  "envVarValues": {},
+  "git": true,
+  "install": true,
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": [
+    "eslint",
+    "compiler",
+    "shadcn",
+    "tanstack-query",
+    "drizzle",
+    "form"
+  ]
+}

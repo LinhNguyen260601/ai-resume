@@ -1,0 +1,73 @@
+---
+description: Enforce Conventional Commits format for all git commit messages
+alwaysApply: true
+---
+
+# Conventional Commits
+
+Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) whenever drafting, suggesting, or writing commit messages.
+
+## Format
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+- **type** + colon + space are required; description is required.
+- Use **lowercase** for type and description.
+- Description: imperative mood, no trailing period, ~72 chars or less.
+- Body: blank line after subject; explain *why*, not just *what*.
+- Footers: blank line after body; use `BREAKING CHANGE:` for breaking changes.
+
+## Types
+
+| Type | Use when |
+|------|----------|
+| `feat` | New user-facing feature |
+| `fix` | Bug fix |
+| `docs` | Documentation only |
+| `style` | Formatting, whitespace (no logic change) |
+| `refactor` | Code change that is neither feat nor fix |
+| `perf` | Performance improvement |
+| `test` | Adding or updating tests |
+| `build` | Build system or dependencies |
+| `ci` | CI/CD configuration |
+| `chore` | Maintenance, tooling, misc |
+
+Prefer `feat` or `fix` when applicable. Split unrelated changes into separate commits.
+
+## Scope (optional)
+
+Noun in parentheses for the affected area: `feat(auth):`, `fix(landing):`, `chore(deps):`.
+
+## Breaking changes
+
+- Prefix: `feat!:` or `feat(api)!:` — **or**
+- Footer: `BREAKING CHANGE: <description>`
+
+## Examples
+
+```
+feat(landing): add testimonial carousel section
+
+fix(upload): reject files larger than 10MB
+
+docs: document local Supabase setup
+
+refactor(resume): extract parsing logic into domain model
+
+feat(api)!: require auth for resume generation
+
+BREAKING CHANGE: /api/generate now returns 401 without a valid session
+```
+
+## When committing
+
+1. Analyze staged changes; pick the correct type and scope.
+2. Focus the subject on **why** the change matters.
+3. Never commit secrets (`.env`, credentials).
+4. Only create commits when the user explicitly asks.

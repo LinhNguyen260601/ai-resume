@@ -1,0 +1,101 @@
+---
+description: Layered React architecture — view / domain / data separation (Martin Fowler)
+alwaysApply: true
+---
+
+# Modular React Architecture
+
+Reference: [Modularizing React Applications with Established UI Patterns](https://martinfowler.com/articles/modularizing-react-apps.html) (Juntao Qiu, Martin Fowler, 2023).
+
+React is a **view library**, not an application framework. Frontends are regular software: separate concerns, apply proven patterns, keep views thin.
+
+## Three layers (think independently)
+
+| Layer | Responsibility | Lives in |
+|-------|----------------|----------|
+| **Presentation** | Render UI; minimal logic | `src/components/` |
+| **Domain** | Business rules, data mapping, calculations | `src/models/`, `src/lib/` |
+| **Data** | Fetch, cache, external APIs (gateway / anti-corruption) | `src/services/`, server functions, TanStack Query |
+
+Domain and data code must **not** import React. Views consume hooks; hooks orchestrate domain + data.
+
+## Refactoring ladder (apply as complexity grows)
+
+1. **Split components** — one concern per component; prefer pure presentational children.
+2. **Extract hooks** — state + side effects out of components (`useX` = state machine behind the view).
+3. **Extract domain models** — encapsulate mapping, defaults, and rules in classes/types (no `provider === "cash"` in JSX).
+4. **Replace conditionals with polymorphism** — when country/feature branches scatter across files (shotgun surgery), use Strategy objects.
+5. **Extract network clients** — fetch + remote→domain conversion in a gateway class; hooks stay thin (use TanStack Query here).
+
+## Rules
+
+### Components (presentation)
+
+- No `fetch` / `useEffect` data loading in components — use hooks or Query.
+- No business conditionals in JSX — push to domain models or formatters.
+- Props in, UI out. Pure presentational components are easy to test and reuse.
+- Small cohesive components can stay together; split when the file is hard to read.
+
+### Hooks (presentation ↔ domain bridge)
+
+- Own React state and effects only — not pure calculations (those belong in domain).
+- Return data + actions; components focus on rendering.
+- Even single-use hooks are worth extracting to keep components presentational.
+
+### Domain models
+
+- Map remote shapes to view-ready objects (`RemotePaymentMethod` → `PaymentMethod`).
+- Expose behavior via getters/methods (`isDefaultMethod`, `label`), not scattered checks.
+- Framework-agnostic TypeScript — reusable outside React.
+
+### Data / services
+
+- One place per external system (anti-corruption layer / gateway).
+- Conversion from API response to domain objects happens here or in models, not in components.
+- Prefer TanStack Query for caching, retries, and loading state.
+
+## Folder layout (feature-friendly)
+
+```
+src/
+├── components/     # views only
+├── hooks/          # React state orchestration
+├── models/         # domain objects & strategies
+├── services/       # API clients & gateways
+├── lib/            # pure utilities
+└── routes/         # TanStack Router (loaders call services)
+```
+
+## Smells → actions
+
+| Smell | Fix |
+|-------|-----|
+| Component does fetch + map + render | Extract hook → service → model |
+| Logic leaks into JSX (`=== "cash"`) | Move to domain model getter |
+| Same `switch (country)` in 3+ files | Strategy class; inject via props/hook |
+| Hook grows with error/retry logic | Extract service; wire with Query |
+| New feature touches many unrelated files | Shotgun surgery — consolidate into one layer |
+
+## Example
+
+```tsx
+// ❌ BAD — mixed concerns
+export function Payment({ amount }: { amount: number }) {
+  const [methods, setMethods] = useState([]);
+  useEffect(() => { fetch('/api/...').then(r => r.json()).then(setMethods); }, []);
+  return methods.map(m => <label defaultChecked={m.name === 'cash'}>...</label>);
+}
+
+// ✅ GOOD — layered
+export function Payment({ amount }: { amount: number }) {
+  const { paymentMethods } = usePaymentMethods();
+  const { total, agreeToDonate, updateAgreeToDonate } = useRoundUp(amount, strategy);
+  return (
+    <>
+      <PaymentMethods options={paymentMethods} />
+      <DonationCheckbox checked={agreeToDonate} onChange={updateAgreeToDonate} />
+      <button>${total}</button>
+    </>
+  );
+}
+```

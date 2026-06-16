@@ -1,0 +1,48 @@
+---
+description: ResumeAI UI design system — colors, typography, components, and brand rules
+alwaysApply: true
+---
+
+# ResumeAI Design System
+
+Full reference: `docs/design-system.md`. Follow it for all UI work.
+
+## Brand
+
+Modern AI SaaS — glassmorphism on dark base, mesh gradients, purple-cyan glow. Futuristic, approachable, premium. Desktop-first (1440px), responsive to mobile.
+
+## Colors (exact hex — no substitutions)
+
+- Background: `#0B0F19` | Surface: `#151B2B` @ 80% + border `#2A3448`
+- Primary: `#8B5CF6` | Secondary: `#22D3EE` | CTA gradient: `#8B5CF6 → #22D3EE`
+- Text: `#F8FAFC` / `#94A3B8` / `#64748B`
+- Semantic: success `#34D399`, warning `#FBBF24`, error `#F87171`
+- Input fill: `#1E293B` | Focus ring: `#22D3EE`
+- AI glow: purple-cyan outer glow on primary buttons and AI chips
+
+## Typography
+
+Font: Inter or Geist. Headings bold with `-0.02em` tracking. Body 14–16px, line-height 1.5–1.6.
+
+## Components
+
+- **Primary button:** gradient fill + glow, `rounded-xl`
+- **Secondary button:** ghost, 1px violet border
+- **AI actions:** pill chips with sparkle/wand icon (Lucide `Sparkles`)
+- **Cards:** `rounded-2xl`, glass (`backdrop-blur-md`), soft shadow
+- **Inputs:** dark fill, cyan focus ring
+- **Tabs:** pill segmented control
+- **Badges:** small rounded pills
+- **Icons:** Lucide line icons, 1.5px stroke
+
+## Navigation
+
+Left sidebar: logo "ResumeAI" + sparkle, items Dashboard / Upload CV / New Job / My CVs (collapsible on mobile). Top bar: breadcrumb + optional "Gemini ready" status.
+
+## Rules
+
+1. Every AI-powered action gets a sparkle icon
+2. Use decorative gradient orbs / dot patterns at ≤5% opacity only
+3. Map shadcn theme tokens to ResumeAI palette in `globals.css`
+4. Build `/design-system` reference screen when implementing components
+5. Never use corporate-boring styling or off-palette colors

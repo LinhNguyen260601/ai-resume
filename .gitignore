@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+.output/
+
+# Framework/tooling caches
+.nitro/
+.tanstack/
+.vinxi/
+.wrangler/
+__unconfig*
+
+# Environment files
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+
+# Test and quality output
+coverage/
+.nyc_output/
+
+# TypeScript / bundler cache
+*.tsbuildinfo
+.vite/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local agent/task artifacts
+todos.json

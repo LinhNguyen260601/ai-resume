@@ -1,0 +1,49 @@
+---
+description: Auto-apply project agent skills from .agents/skills before acting
+alwaysApply: true
+---
+
+# Agent Skills (auto-apply)
+
+Project skills live in `.agents/skills/*/SKILL.md`. The user does **not** need to name them — you must select and read them yourself.
+
+## Before every task
+
+1. Scan available skills (descriptions in your skills list + `.agents/skills/`).
+2. If a skill might apply (even ~1% chance), **read its full `SKILL.md` first** with the Read tool.
+3. Follow the skill for that task. User instructions override skills when they conflict.
+
+## Priority when multiple skills match
+
+1. **Process** — debugging, planning, verification (including superpowers plugin skills)
+2. **Stack** — TanStack Start / Router / Query / integration
+3. **UI** — shadcn, design-taste-frontend, image-to-code, stitch-design-taste
+4. **Quality** — web-quality-audit (broad), then performance, core-web-vitals, accessibility, seo, best-practices
+5. **Output** — full-output-enforcement when delivering complete files or large artifacts
+
+For landing/marketing pages, combine **UI + Quality** skills (design + seo + performance + a11y).
+
+## ResumeAI routing (quick map)
+
+| Task signal | Skill |
+|-------------|-------|
+| shadcn, components.json, UI components | `shadcn` |
+| Landing page, portfolio, marketing UI, redesign | `design-taste-frontend` |
+| Screenshot/mockup → code, hero, visual fidelity | `image-to-code` |
+| Google Stitch, DESIGN.md generation | `stitch-design-taste` |
+| TanStack Start, server functions, SSR | `tanstack-start-best-practices` |
+| Routes, loaders, search params | `tanstack-router-best-practices` |
+| React Query, mutations, cache | `tanstack-query-best-practices` |
+| Router + Query + Start together | `tanstack-integration-best-practices` |
+| Browser automation, E2E, Playwright | `playwright-cli` |
+| Full files, no placeholders, exhaustive output | `full-output-enforcement` |
+| Audit site, Lighthouse, overall web quality | `web-quality-audit` |
+| Speed, load time, bundle, slow pages | `performance` |
+| LCP, INP, CLS, layout shift | `core-web-vitals` |
+| WCAG, a11y, keyboard, screen reader | `accessibility` |
+| Meta tags, structured data, search ranking | `seo` |
+| Security, vulnerabilities, modernize code | `best-practices` |
+
+Also follow `.cursor/rules/design-system.mdc` and `docs/design-system.md` for all UI work.
+
+Install or update skills with `npx skills add …` (lockfile: `skills-lock.json`).
