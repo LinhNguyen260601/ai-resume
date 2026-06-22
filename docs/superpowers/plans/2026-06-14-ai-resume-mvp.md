@@ -14,35 +14,36 @@
 
 ## File Map
 
-| Path | Responsibility |
-|------|----------------|
-| `src/lib/schemas/cv.ts` | `CvContent` Zod schema + TypeScript types |
-| `src/lib/supabase.ts` | Server-side Supabase client (service role) |
-| `src/lib/gemini.ts` | Gemini client + structured JSON helpers |
-| `src/lib/pdf-extract.ts` | Extract text from PDF/DOCX buffers |
-| `src/lib/url-scrape.ts` | Fetch URL, Readability extraction, SSRF guard |
-| `src/lib/templates.ts` | Template registry (id → component) |
-| `src/server/cv.ts` | `parseCvUpload` server function |
-| `src/server/jobs.ts` | `scrapeJobUrl`, `createJobPosting` server functions |
-| `src/server/tailor.ts` | `tailorCvForJob` server function |
-| `src/server/export.ts` | `exportPdf` server function |
-| `src/templates/*.tsx` | Four CV template React components |
-| `src/components/cv/*` | Editor field components |
-| `src/components/upload/Dropzone.tsx` | File upload UI |
-| `src/components/jobs/JobForm.tsx` | Paste/URL job form |
-| `src/routes/index.tsx` | Dashboard |
-| `src/routes/upload.tsx` | Upload page |
-| `src/routes/jobs/new.tsx` | New job page |
-| `src/routes/tailor/$jobId.tsx` | Base CV picker + tailor trigger |
-| `src/routes/editor/$tailoredCvId.tsx` | Editor + live preview |
-| `src/routes/export/$tailoredCvId.tsx` | Template picker + download |
-| `supabase/migrations/001_initial_schema.sql` | DB schema + seed profile |
+| Path                                         | Responsibility                                      |
+| -------------------------------------------- | --------------------------------------------------- |
+| `src/lib/schemas/cv.ts`                      | `CvContent` Zod schema + TypeScript types           |
+| `src/lib/supabase.ts`                        | Server-side Supabase client (service role)          |
+| `src/lib/gemini.ts`                          | Gemini client + structured JSON helpers             |
+| `src/lib/pdf-extract.ts`                     | Extract text from PDF/DOCX buffers                  |
+| `src/lib/url-scrape.ts`                      | Fetch URL, Readability extraction, SSRF guard       |
+| `src/lib/templates.ts`                       | Template registry (id → component)                  |
+| `src/server/cv.ts`                           | `parseCvUpload` server function                     |
+| `src/server/jobs.ts`                         | `scrapeJobUrl`, `createJobPosting` server functions |
+| `src/server/tailor.ts`                       | `tailorCvForJob` server function                    |
+| `src/server/export.ts`                       | `exportPdf` server function                         |
+| `src/templates/*.tsx`                        | Four CV template React components                   |
+| `src/components/cv/*`                        | Editor field components                             |
+| `src/components/upload/Dropzone.tsx`         | File upload UI                                      |
+| `src/components/jobs/JobForm.tsx`            | Paste/URL job form                                  |
+| `src/routes/index.tsx`                       | Dashboard                                           |
+| `src/routes/upload.tsx`                      | Upload page                                         |
+| `src/routes/jobs/new.tsx`                    | New job page                                        |
+| `src/routes/tailor/$jobId.tsx`               | Base CV picker + tailor trigger                     |
+| `src/routes/editor/$tailoredCvId.tsx`        | Editor + live preview                               |
+| `src/routes/export/$tailoredCvId.tsx`        | Template picker + download                          |
+| `supabase/migrations/001_initial_schema.sql` | DB schema + seed profile                            |
 
 ---
 
 ### Task 1: Scaffold TanStack Start project
 
 **Files:**
+
 - Create: project root via CLI
 - Create: `.env.example`
 - Modify: `package.json` (add deps in Task 2)
@@ -71,10 +72,10 @@ Expected: App at `http://localhost:3000`
 
 ```bash
 # .env.example
-GEMINI_API_KEY=
-SUPABASE_URL=
-SUPABASE_SERVICE_ROLE_KEY=
-DEFAULT_PROFILE_ID=
+VITE_GEMINI_API_KEY=
+VITE_SUPABASE_URL=
+VITE_SUPABASE_SERVICE_ROLE_KEY=
+VITE_DEFAULT_PROFILE_ID=
 ```
 
 ---
@@ -82,6 +83,7 @@ DEFAULT_PROFILE_ID=
 ### Task 2: Install dependencies
 
 **Files:**
+
 - Modify: `package.json`
 
 - [ ] **Step 1: Install runtime dependencies**
@@ -111,6 +113,7 @@ Expected: `src/components/ui/` populated with shadcn components.
 ### Task 3: Database schema
 
 **Files:**
+
 - Create: `supabase/migrations/001_initial_schema.sql`
 
 - [ ] **Step 1: Write migration SQL**
@@ -162,7 +165,7 @@ create index idx_base_cvs_profile on base_cvs(profile_id);
 create index idx_job_postings_profile on job_postings(profile_id);
 create index idx_tailored_cvs_profile on tailored_cvs(profile_id);
 
--- Seed single user profile; copy this UUID to DEFAULT_PROFILE_ID in .env
+-- Seed single user profile; copy this UUID to VITE_DEFAULT_PROFILE_ID in .env
 insert into profiles (id, display_name)
 values ('00000000-0000-0000-0000-000000000001', 'Default User');
 ```
@@ -178,13 +181,14 @@ npx supabase db push
 - [ ] **Step 3: Create Storage buckets**
 
 In Supabase dashboard → Storage, create:
+
 - `cv-uploads` (private)
 - `cv-exports` (private)
 
 - [ ] **Step 4: Set `.env`**
 
 ```bash
-DEFAULT_PROFILE_ID=00000000-0000-0000-0000-000000000001
+VITE_DEFAULT_PROFILE_ID=00000000-0000-0000-0000-000000000001
 ```
 
 ---
@@ -192,6 +196,7 @@ DEFAULT_PROFILE_ID=00000000-0000-0000-0000-000000000001
 ### Task 4: Core schemas and types
 
 **Files:**
+
 - Create: `src/lib/schemas/cv.ts`
 - Test: `src/lib/schemas/cv.test.ts`
 
@@ -317,6 +322,7 @@ Expected: PASS
 ### Task 5: Supabase and Gemini clients
 
 **Files:**
+
 - Create: `src/lib/supabase.ts`
 - Create: `src/lib/gemini.ts`
 
@@ -327,15 +333,15 @@ Expected: PASS
 import { createClient } from '@supabase/supabase-js'
 
 export function createServerSupabase() {
-  const url = process.env.SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const url = process.env.VITE_SUPABASE_URL
+  const key = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY
   if (!url || !key) throw new Error('Missing Supabase env vars')
   return createClient(url, key)
 }
 
 export function getDefaultProfileId() {
-  const id = process.env.DEFAULT_PROFILE_ID
-  if (!id) throw new Error('Missing DEFAULT_PROFILE_ID')
+  const id = process.env.VITE_DEFAULT_PROFILE_ID
+  if (!id) throw new Error('Missing VITE_DEFAULT_PROFILE_ID')
   return id
 }
 ```
@@ -347,8 +353,8 @@ export function getDefaultProfileId() {
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
 export function createGemini() {
-  const apiKey = process.env.GEMINI_API_KEY
-  if (!apiKey) throw new Error('Missing GEMINI_API_KEY')
+  const apiKey = process.env.VITE_GEMINI_API_KEY
+  if (!apiKey) throw new Error('Missing VITE_GEMINI_API_KEY')
   return new GoogleGenerativeAI(apiKey)
 }
 
@@ -374,6 +380,7 @@ export async function generateStructuredJson<T>(
 ### Task 6: PDF/DOCX text extraction
 
 **Files:**
+
 - Create: `src/lib/pdf-extract.ts`
 - Test: `src/lib/pdf-extract.test.ts`
 
@@ -430,6 +437,7 @@ describe('isLowTextQuality', () => {
 ### Task 7: URL scraping with SSRF guard
 
 **Files:**
+
 - Create: `src/lib/ssrf.ts`
 - Create: `src/lib/url-scrape.ts`
 - Test: `src/lib/ssrf.test.ts`
@@ -450,9 +458,7 @@ export function assertPublicUrl(input: string): URL {
   if (BLOCKED_HOSTS.includes(parsed.hostname)) {
     throw new Error('Private URLs not allowed')
   }
-  if (
-    /^10\.|^172\.(1[6-9]|2\d|3[01])\.|^192\.168\./.test(parsed.hostname)
-  ) {
+  if (/^10\.|^172\.(1[6-9]|2\d|3[01])\.|^192\.168\./.test(parsed.hostname)) {
     throw new Error('Private IPs not allowed')
   }
   return parsed
@@ -511,6 +517,7 @@ describe('assertPublicUrl', () => {
 ### Task 8: CV upload server function
 
 **Files:**
+
 - Create: `src/server/cv.ts`
 
 - [ ] **Step 1: Implement `parseCvUpload`**
@@ -543,8 +550,10 @@ export const parseCvUpload = createServerFn({ method: 'POST' })
       'application/pdf',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     ]
-    if (!allowed.includes(file.type)) throw new Error('Only PDF and DOCX allowed')
-    if (file.size > 10 * 1024 * 1024) throw new Error('File too large (max 10MB)')
+    if (!allowed.includes(file.type))
+      throw new Error('Only PDF and DOCX allowed')
+    if (file.size > 10 * 1024 * 1024)
+      throw new Error('File too large (max 10MB)')
 
     const buffer = Buffer.from(await file.arrayBuffer())
     const rawText = await extractTextFromFile(buffer, file.type)
@@ -605,6 +614,7 @@ export const listBaseCvs = createServerFn({ method: 'GET' }).handler(
 ### Task 9: Upload page
 
 **Files:**
+
 - Create: `src/components/upload/Dropzone.tsx`
 - Create: `src/routes/upload.tsx`
 
@@ -634,15 +644,15 @@ export function Dropzone({ onSuccess }: { onSuccess: () => void }) {
     onError: (err: Error) => toast.error(err.message),
   })
 
-  const handleFile = useCallback(
-    (file: File) => upload.mutate(file),
-    [upload],
-  )
+  const handleFile = useCallback((file: File) => upload.mutate(file), [upload])
 
   return (
     <div
       className={`border-2 border-dashed rounded-lg p-12 text-center ${dragging ? 'border-primary bg-muted' : 'border-muted-foreground/30'}`}
-      onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
+      onDragOver={(e) => {
+        e.preventDefault()
+        setDragging(true)
+      }}
       onDragLeave={() => setDragging(false)}
       onDrop={(e) => {
         e.preventDefault()
@@ -705,7 +715,10 @@ function UploadPage() {
               <CardTitle className="text-base">{cv.file_name}</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
-              {(cv.content as { personal: { fullName: string } }).personal.fullName}
+              {
+                (cv.content as { personal: { fullName: string } }).personal
+                  .fullName
+              }
               {' · '}
               {new Date(cv.created_at).toLocaleDateString()}
             </CardContent>
@@ -722,6 +735,7 @@ function UploadPage() {
 ### Task 10: Job posting server functions
 
 **Files:**
+
 - Create: `src/server/jobs.ts`
 
 - [ ] **Step 1: Implement scrape + create**
@@ -768,7 +782,9 @@ export const createJobPosting = createServerFn({ method: 'POST' })
       extracted_text: string
       company_name?: string
       job_title?: string
-    }) => jobMetaSchema.parse({ ...data, extracted_text: data.extracted_text }) && data,
+    }) =>
+      jobMetaSchema.parse({ ...data, extracted_text: data.extracted_text }) &&
+      data,
   )
   .handler(async ({ data }) => {
     const supabase = createServerSupabase()
@@ -808,12 +824,14 @@ export const listJobPostings = createServerFn({ method: 'GET' }).handler(
 ### Task 11: New job page
 
 **Files:**
+
 - Create: `src/components/jobs/JobForm.tsx`
 - Create: `src/routes/jobs/new.tsx`
 
 - [ ] **Step 1: JobForm with paste/URL tabs**
 
 Build `JobForm.tsx` with:
+
 - Tabs: "Paste text" | "From URL"
 - URL tab: input + Fetch button → calls `scrapeJobUrl` → populates editable textarea
 - Fields: company name, job title (pre-filled from scrape)
@@ -828,6 +846,7 @@ Wire up form with TanStack Router `useNavigate` to redirect on success.
 ### Task 12: AI tailor server function
 
 **Files:**
+
 - Create: `src/server/tailor.ts`
 
 - [ ] **Step 1: Implement tailor**
@@ -845,8 +864,16 @@ export const tailorCvForJob = createServerFn({ method: 'POST' })
     const supabase = createServerSupabase()
 
     const [{ data: baseCv }, { data: job }] = await Promise.all([
-      supabase.from('base_cvs').select('content').eq('id', data.baseCvId).single(),
-      supabase.from('job_postings').select('*').eq('id', data.jobPostingId).single(),
+      supabase
+        .from('base_cvs')
+        .select('content')
+        .eq('id', data.baseCvId)
+        .single(),
+      supabase
+        .from('job_postings')
+        .select('*')
+        .eq('id', data.jobPostingId)
+        .single(),
     ])
     if (!baseCv || !job) throw new Error('CV or job not found')
 
@@ -895,6 +922,7 @@ ${job.extracted_text}`,
 ### Task 13: CV editor
 
 **Files:**
+
 - Create: `src/components/cv/EditorSection.tsx`
 - Create: `src/components/cv/ExperienceEditor.tsx`
 - Create: `src/components/cv/CvPreview.tsx`
@@ -923,7 +951,9 @@ export const getTailoredCv = createServerFn({ method: 'GET' })
   })
 
 export const updateTailoredCv = createServerFn({ method: 'POST' })
-  .validator((data: { id: string; content: unknown; template_id?: string }) => data)
+  .validator(
+    (data: { id: string; content: unknown; template_id?: string }) => data,
+  )
   .handler(async ({ data }) => {
     const content = cvContentSchema.parse(data.content)
     const supabase = createServerSupabase()
@@ -959,6 +989,7 @@ Dropdown changes `template_id` and preview instantly.
 ### Task 14: CV templates
 
 **Files:**
+
 - Create: `src/templates/classic.tsx`
 - Create: `src/templates/modern.tsx`
 - Create: `src/templates/creative.tsx`
@@ -985,7 +1016,9 @@ export const TEMPLATES = [
 
 export type TemplateId = (typeof TEMPLATES)[number]['id']
 
-export function getTemplateComponent(id: TemplateId): ComponentType<{ content: CvContent }> {
+export function getTemplateComponent(
+  id: TemplateId,
+): ComponentType<{ content: CvContent }> {
   return TEMPLATES.find((t) => t.id === id)?.component ?? ModernTemplate
 }
 ```
@@ -1001,10 +1034,19 @@ Each accepts `{ content: CvContent }` and renders print-friendly HTML with Tailw
 import { getTemplateComponent, type TemplateId } from '../../lib/templates'
 import type { CvContent } from '../../lib/schemas/cv'
 
-export function CvPreview({ content, templateId }: { content: CvContent; templateId: TemplateId }) {
+export function CvPreview({
+  content,
+  templateId,
+}: {
+  content: CvContent
+  templateId: TemplateId
+}) {
   const Template = getTemplateComponent(templateId)
   return (
-    <div className="bg-white shadow-lg mx-auto" style={{ width: '210mm', minHeight: '297mm' }}>
+    <div
+      className="bg-white shadow-lg mx-auto"
+      style={{ width: '210mm', minHeight: '297mm' }}
+    >
       <Template content={content} />
     </div>
   )
@@ -1016,6 +1058,7 @@ export function CvPreview({ content, templateId }: { content: CvContent; templat
 ### Task 15: PDF export
 
 **Files:**
+
 - Create: `src/server/export.ts`
 - Create: `src/routes/export/$tailoredCvId.tsx`
 
@@ -1065,6 +1108,7 @@ Grid of 4 template thumbnails, live preview, "Download PDF" decodes base64 and t
 ### Task 16: Dashboard and layout
 
 **Files:**
+
 - Modify: `src/routes/__root.tsx`
 - Modify: `src/routes/index.tsx`
 - Create: `src/components/layout/AppShell.tsx`
@@ -1103,18 +1147,18 @@ Expected: All schema, SSRF, and pdf-extract tests pass.
 
 ## Spec Coverage Checklist
 
-| Spec requirement | Task |
-|------------------|------|
-| Upload PDF/DOCX | Task 8–9 |
-| Paste + URL job input | Task 10–11 |
-| AI parse + tailor (Gemini) | Task 8, 12 |
-| Inline editor + reorder | Task 13 |
-| 4 templates | Task 14 |
-| PDF export (Playwright) | Task 15 |
-| Supabase storage + DB | Task 3, 8 |
-| Single-user / profile_id | Task 3, 5 |
-| SSRF + file validation | Task 7, 8 |
-| Dashboard | Task 16 |
+| Spec requirement           | Task             |
+| -------------------------- | ---------------- |
+| Upload PDF/DOCX            | Task 8–9         |
+| Paste + URL job input      | Task 10–11       |
+| AI parse + tailor (Gemini) | Task 8, 12       |
+| Inline editor + reorder    | Task 13          |
+| 4 templates                | Task 14          |
+| PDF export (Playwright)    | Task 15          |
+| Supabase storage + DB      | Task 3, 8        |
+| Single-user / profile_id   | Task 3, 5        |
+| SSRF + file validation     | Task 7, 8        |
+| Dashboard                  | Task 16          |
 | Deferred features excluded | N/A in this plan |
 
 ---

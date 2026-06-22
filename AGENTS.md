@@ -33,6 +33,8 @@ If unsure whether a skill applies, read it anyway — false positives are cheape
 | `accessibility` | WCAG 2.2, a11y audit, keyboard/screen reader support |
 | `seo` | Meta tags, structured data, sitemap, search visibility |
 | `best-practices` | Security, compatibility, code quality, vulnerability checks |
+| `supabase` | Supabase (auth, DB, RLS, migrations, CLI, MCP, Edge Functions, Storage) |
+| `supabase-postgres-best-practices` | Postgres queries, schema design, indexes, performance tuning |
 
 Manage skills: `npx skills add`, `npx skills check`, `npx skills update`. See `skills-lock.json`.
 
@@ -40,4 +42,5 @@ Manage skills: `npx skills add`, `npx skills check`, `npx skills update`. See `s
 
 - **UI:** shadcn + ResumeAI design system (`.cursor/rules/design-system.mdc`)
 - **App:** TanStack Start / Router / Query — use the matching TanStack skills above
+- **Backend:** Supabase Postgres + Drizzle (`src/db/`) — use `supabase` and `supabase-postgres-best-practices` for DB/auth work
 - **Package runner:** prefer `bun` when present in the project

@@ -1,0 +1,6 @@
+export const ENVIRONMENTS = {
+  GEMINI_API_KEY: import.meta.env.VITE_GEMINI_API_KEY,
+  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
+  SUPABASE_SERVICE_ROLE_KEY: import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY,
+  DEFAULT_PROFILE_ID: import.meta.env.VITE_DEFAULT_PROFILE_ID,
+} as const

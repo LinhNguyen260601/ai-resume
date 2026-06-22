@@ -17,9 +17,10 @@ Project skills live in `.agents/skills/*/SKILL.md`. The user does **not** need t
 
 1. **Process** — debugging, planning, verification (including superpowers plugin skills)
 2. **Stack** — TanStack Start / Router / Query / integration
-3. **UI** — shadcn, design-taste-frontend, image-to-code, stitch-design-taste
-4. **Quality** — web-quality-audit (broad), then performance, core-web-vitals, accessibility, seo, best-practices
-5. **Output** — full-output-enforcement when delivering complete files or large artifacts
+3. **Data** — supabase (any Supabase work), supabase-postgres-best-practices (queries/schema)
+4. **UI** — shadcn, design-taste-frontend, image-to-code, stitch-design-taste
+5. **Quality** — web-quality-audit (broad), then performance, core-web-vitals, accessibility, seo, best-practices
+6. **Output** — full-output-enforcement when delivering complete files or large artifacts
 
 For landing/marketing pages, combine **UI + Quality** skills (design + seo + performance + a11y).
 
@@ -35,6 +36,8 @@ For landing/marketing pages, combine **UI + Quality** skills (design + seo + per
 | Routes, loaders, search params | `tanstack-router-best-practices` |
 | React Query, mutations, cache | `tanstack-query-best-practices` |
 | Router + Query + Start together | `tanstack-integration-best-practices` |
+| Supabase, auth, RLS, migrations, MCP, Edge Functions | `supabase` |
+| Postgres queries, schema, indexes, DB performance | `supabase-postgres-best-practices` |
 | Browser automation, E2E, Playwright | `playwright-cli` |
 | Full files, no placeholders, exhaustive output | `full-output-enforcement` |
 | Audit site, Lighthouse, overall web quality | `web-quality-audit` |

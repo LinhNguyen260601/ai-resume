@@ -12,19 +12,19 @@ Built for single-user local use now, with architecture ready for multi-user depl
 
 ## Requirements (v1)
 
-| Decision | Choice |
-|----------|--------|
-| Audience | Single user now; multi-user later |
-| MVP scope | Core loop only (no tracker, no job research) |
-| Base CV input | Upload PDF or Word; AI extracts and structures |
-| Job input | Paste text **and** URL (with scrape + confirm) |
+| Decision       | Choice                                          |
+| -------------- | ----------------------------------------------- |
+| Audience       | Single user now; multi-user later               |
+| MVP scope      | Core loop only (no tracker, no job research)    |
+| Base CV input  | Upload PDF or Word; AI extracts and structures  |
+| Job input      | Paste text **and** URL (with scrape + confirm)  |
 | Manual editing | Full inline editor (bullets, sections, reorder) |
-| Deployment | Local now; deploy-ready architecture |
-| Framework | TanStack Start |
-| Data & files | Supabase (Postgres + Storage) |
-| AI | Gemini 2.5 Flash |
-| Templates | 4 (Classic, Modern, Creative, Compact) |
-| Export format | PDF only |
+| Deployment     | Local now; deploy-ready architecture            |
+| Framework      | TanStack Start                                  |
+| Data & files   | Supabase (Postgres + Storage)                   |
+| AI             | Gemini 2.5 Flash                                |
+| Templates      | 4 (Classic, Modern, Creative, Compact)          |
+| Export format  | PDF only                                        |
 
 ### Deferred to later phases
 
@@ -104,16 +104,16 @@ flowchart TB
 
 ### Stack
 
-| Layer | Choice |
-|-------|--------|
-| Framework | TanStack Start (RC) + TanStack Router |
-| Data fetching | TanStack Query |
-| Forms / editor | TanStack Form |
-| Database | Supabase Postgres |
-| File storage | Supabase Storage |
-| AI | Gemini 2.5 Flash (structured JSON output) |
-| PDF | Playwright (headless Chromium) |
-| Styling | Tailwind CSS + shadcn/ui |
+| Layer          | Choice                                    |
+| -------------- | ----------------------------------------- |
+| Framework      | TanStack Start (RC) + TanStack Router     |
+| Data fetching  | TanStack Query                            |
+| Forms / editor | TanStack Form                             |
+| Database       | Supabase Postgres                         |
+| File storage   | Supabase Storage                          |
+| AI             | Gemini 2.5 Flash (structured JSON output) |
+| PDF            | Playwright (headless Chromium)            |
+| Styling        | Tailwind CSS + shadcn/ui                  |
 
 ### Key flows
 
@@ -128,11 +128,11 @@ flowchart TB
 - No auth in v1 — implicit single `profile` row
 - All tables include `profile_id` from day one
 - Supabase RLS policies stubbed but disabled until auth is added
-- `DEFAULT_PROFILE_ID` env var identifies the seed profile
+- `VITE_DEFAULT_PROFILE_ID` env var identifies the seed profile
 
 ### Deploy-ready
 
-- Secrets in `.env` (`GEMINI_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`) — never `VITE_` prefixed
+- Secrets in `.env` (`VITE_GEMINI_API_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_SERVICE_ROLE_KEY`) — never `VITE_` prefixed
 - `npm run dev` locally; deploy later to Railway/Vercel with the same env vars
 - TanStack Start server functions access DB, AI, and Playwright server-side only
 
@@ -160,8 +160,8 @@ type CvContent = {
     company: string
     title: string
     location?: string
-    startDate: string      // "2021-03"
-    endDate?: string       // "2024-06" or "Present"
+    startDate: string // "2021-03"
+    endDate?: string // "2024-06" or "Present"
     bullets: string[]
   }>
   education: Array<{
@@ -194,12 +194,12 @@ type CvContent = {
 
 ### Tables
 
-| Table | Purpose | Key columns |
-|-------|---------|-------------|
-| `profiles` | Single user profile (v1) | `id`, `display_name`, `created_at` |
-| `base_cvs` | Uploaded originals + parsed content | `id`, `profile_id`, `file_path`, `file_name`, `content` (JSONB), `created_at` |
-| `job_postings` | Job descriptions | `id`, `profile_id`, `source_type` (`paste` \| `url`), `source_url`, `raw_text`, `extracted_text`, `company_name`, `job_title`, `created_at` |
-| `tailored_cvs` | AI-tailored + manually edited versions | `id`, `profile_id`, `base_cv_id`, `job_posting_id`, `content` (JSONB), `template_id`, `title`, `created_at`, `updated_at` |
+| Table          | Purpose                                | Key columns                                                                                                                                 |
+| -------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `profiles`     | Single user profile (v1)               | `id`, `display_name`, `created_at`                                                                                                          |
+| `base_cvs`     | Uploaded originals + parsed content    | `id`, `profile_id`, `file_path`, `file_name`, `content` (JSONB), `created_at`                                                               |
+| `job_postings` | Job descriptions                       | `id`, `profile_id`, `source_type` (`paste` \| `url`), `source_url`, `raw_text`, `extracted_text`, `company_name`, `job_title`, `created_at` |
+| `tailored_cvs` | AI-tailored + manually edited versions | `id`, `profile_id`, `base_cv_id`, `job_posting_id`, `content` (JSONB), `template_id`, `title`, `created_at`, `updated_at`                   |
 
 ### Relationships
 
@@ -214,21 +214,21 @@ erDiagram
 
 ### Storage (Supabase Storage)
 
-| Bucket | Contents |
-|--------|----------|
-| `cv-uploads` | Original PDF/Word files (`{profile_id}/{uuid}.{ext}`) |
+| Bucket       | Contents                                                              |
+| ------------ | --------------------------------------------------------------------- |
+| `cv-uploads` | Original PDF/Word files (`{profile_id}/{uuid}.{ext}`)                 |
 | `cv-exports` | Generated PDFs (`{profile_id}/{tailored_cv_id}.pdf`) — optional cache |
 
 ### Templates (code-defined in v1)
 
 Four React components registered in a `templates` config:
 
-| ID | Name | Style |
-|----|------|-------|
-| `classic` | Classic Professional | Serif headings, conservative layout |
-| `modern` | Modern Minimal | Sans-serif, whitespace, accent color bar |
-| `creative` | Creative | Bold typography, sidebar accent |
-| `compact` | Compact | Dense single-page layout |
+| ID         | Name                 | Style                                    |
+| ---------- | -------------------- | ---------------------------------------- |
+| `classic`  | Classic Professional | Serif headings, conservative layout      |
+| `modern`   | Modern Minimal       | Sans-serif, whitespace, accent color bar |
+| `creative` | Creative             | Bold typography, sidebar accent          |
+| `compact`  | Compact              | Dense single-page layout                 |
 
 ---
 
@@ -236,14 +236,14 @@ Four React components registered in a `templates` config:
 
 ### Page map
 
-| Route | Purpose |
-|-------|---------|
-| `/` | Dashboard — recent tailored CVs, quick actions |
-| `/upload` | Upload base CV (PDF/Word) |
-| `/jobs/new` | New job: paste text or enter URL |
-| `/tailor/:jobId` | Pick base CV → run AI tailor → redirect to editor |
-| `/editor/:tailoredCvId` | Inline editor + live template preview |
-| `/export/:tailoredCvId` | Template picker + PDF download |
+| Route                   | Purpose                                           |
+| ----------------------- | ------------------------------------------------- |
+| `/`                     | Dashboard — recent tailored CVs, quick actions    |
+| `/upload`               | Upload base CV (PDF/Word)                         |
+| `/jobs/new`             | New job: paste text or enter URL                  |
+| `/tailor/:jobId`        | Pick base CV → run AI tailor → redirect to editor |
+| `/editor/:tailoredCvId` | Inline editor + live template preview             |
+| `/export/:tailoredCvId` | Template picker + PDF download                    |
 
 ### Primary user flow
 
@@ -264,23 +264,27 @@ flowchart LR
 ### Page details
 
 **Dashboard (`/`)**
+
 - Card list of recent `tailored_cvs` (job title, company, date, template)
 - CTAs: "Upload CV", "New Job Application"
 - Empty state guides first-time user through upload → job → tailor
 
 **Upload (`/upload`)**
+
 - Drag-and-drop zone (PDF, DOCX; max 10 MB)
 - Progress: uploading → parsing → structuring (AI)
 - On success: show parsed summary (name, job count, skill count) with "Looks good" / "Re-parse"
 - List of previously uploaded base CVs below
 
 **New Job (`/jobs/new`)**
+
 - Tab toggle: Paste text | From URL
 - Paste: large textarea
 - URL: input field + "Fetch" button → extracted text shown in editable preview before saving
 - Company name + job title fields (auto-filled by AI from text, editable)
 
 **Editor (`/editor/:id`)**
+
 - Split layout: left = form editor, right = live template preview
 - Editor sections: Personal, Summary, Experience, Education, Skills
 - Per section: add/remove/reorder (drag handles on experience entries and bullets)
@@ -288,6 +292,7 @@ flowchart LR
 - Auto-save on change (debounced 1s via TanStack Query mutation)
 
 **Export (`/export/:id`)**
+
 - Grid of 4 template thumbnails with live preview
 - "Download PDF" button
 - Optional: save to `cv-exports` bucket for re-download from dashboard
@@ -302,13 +307,13 @@ flowchart LR
 
 ### AI operations
 
-| Scenario | Handling |
-|----------|----------|
-| Gemini rate limit / timeout | Retry once (2s delay); toast: "AI busy, try again" |
-| CV parse returns incomplete data | Show parsed result with highlighted missing fields |
-| CV parse fails entirely | Toast + "Start blank" fallback with name from filename |
-| Tailor hallucinates experience | Prompt forbids inventing roles; user reviews in editor |
-| Job URL fetch blocked (403) | Message: "Couldn't fetch — paste manually" with focused textarea |
+| Scenario                         | Handling                                                         |
+| -------------------------------- | ---------------------------------------------------------------- |
+| Gemini rate limit / timeout      | Retry once (2s delay); toast: "AI busy, try again"               |
+| CV parse returns incomplete data | Show parsed result with highlighted missing fields               |
+| CV parse fails entirely          | Toast + "Start blank" fallback with name from filename           |
+| Tailor hallucinates experience   | Prompt forbids inventing roles; user reviews in editor           |
+| Job URL fetch blocked (403)      | Message: "Couldn't fetch — paste manually" with focused textarea |
 
 ### URL scraping (hybrid)
 
@@ -319,24 +324,24 @@ flowchart LR
 
 ### File uploads
 
-| Scenario | Handling |
-|----------|----------|
-| Wrong file type | Reject client + server; accept only `.pdf`, `.docx` |
-| File too large (>10 MB) | Client-side rejection |
-| Corrupt/unreadable PDF | Toast: "Couldn't read file — try a different format" |
+| Scenario                 | Handling                                                    |
+| ------------------------ | ----------------------------------------------------------- |
+| Wrong file type          | Reject client + server; accept only `.pdf`, `.docx`         |
+| File too large (>10 MB)  | Client-side rejection                                       |
+| Corrupt/unreadable PDF   | Toast: "Couldn't read file — try a different format"        |
 | Scanned PDF (image-only) | Warn: "Looks like a scanned image — extraction may be poor" |
 
 ### PDF export
 
-| Scenario | Handling |
-|----------|----------|
-| Playwright timeout | Retry once; error message if second attempt fails |
-| Long CV (>2 pages) | CSS `break-inside: avoid` on experience blocks |
+| Scenario             | Handling                                                         |
+| -------------------- | ---------------------------------------------------------------- |
+| Playwright timeout   | Retry once; error message if second attempt fails                |
+| Long CV (>2 pages)   | CSS `break-inside: avoid` on experience blocks                   |
 | Export while editing | Debounced save completes first; export uses latest saved version |
 
 ### Security
 
-- `GEMINI_API_KEY` and `SUPABASE_SERVICE_ROLE_KEY` server-side only
+- `VITE_GEMINI_API_KEY` and `VITE_SUPABASE_SERVICE_ROLE_KEY` server-side only
 - URL fetch: block private IPs (SSRF), 10s timeout, max 5 MB response
 - File uploads validated by MIME type, not extension alone
 - All server functions validate input with Zod schemas
@@ -345,12 +350,12 @@ flowchart LR
 
 ## Environment Variables
 
-| Variable | Purpose |
-|----------|---------|
-| `GEMINI_API_KEY` | Google AI API key |
-| `SUPABASE_URL` | Supabase project URL |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-side DB + storage access |
-| `DEFAULT_PROFILE_ID` | UUID of seed profile row (v1 single user) |
+| Variable                         | Purpose                                   |
+| -------------------------------- | ----------------------------------------- |
+| `VITE_GEMINI_API_KEY`            | Google AI API key                         |
+| `VITE_SUPABASE_URL`              | Supabase project URL                      |
+| `VITE_SUPABASE_SERVICE_ROLE_KEY` | Server-side DB + storage access           |
+| `VITE_DEFAULT_PROFILE_ID`        | UUID of seed profile row (v1 single user) |
 
 ---
 
