@@ -326,7 +326,7 @@ Expected: PASS
 - Create: `src/lib/supabase.ts`
 - Create: `src/lib/gemini.ts`
 
-- [ ] **Step 1: Supabase server client**
+- [x] **Step 1: Supabase server client**
 
 ```typescript
 // src/lib/supabase.ts
@@ -346,7 +346,7 @@ export function getDefaultProfileId() {
 }
 ```
 
-- [ ] **Step 2: Gemini client**
+- [x] **Step 2: Gemini client**
 
 ```typescript
 // src/lib/gemini.ts
