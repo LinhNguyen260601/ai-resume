@@ -384,7 +384,7 @@ export async function generateStructuredJson<T>(
 - Create: `src/lib/pdf-extract.ts`
 - Test: `src/lib/pdf-extract.test.ts`
 
-- [ ] **Step 1: Implement extraction**
+- [x] **Step 1: Implement extraction**
 
 ```typescript
 // src/lib/pdf-extract.ts
@@ -415,7 +415,7 @@ export function isLowTextQuality(text: string): boolean {
 }
 ```
 
-- [ ] **Step 2: Write test for low-text detection**
+- [x] **Step 2: Write test for low-text detection**
 
 ```typescript
 // src/lib/pdf-extract.test.ts
