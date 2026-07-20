@@ -200,7 +200,7 @@ VITE_DEFAULT_PROFILE_ID=00000000-0000-0000-0000-000000000001
 - Create: `src/lib/schemas/cv.ts`
 - Test: `src/lib/schemas/cv.test.ts`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 ```typescript
 // src/lib/schemas/cv.test.ts
@@ -234,7 +234,7 @@ describe('cvContentSchema', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 ```bash
 npm run test -- src/lib/schemas/cv.test.ts
@@ -242,7 +242,7 @@ npm run test -- src/lib/schemas/cv.test.ts
 
 Expected: FAIL — module not found
 
-- [ ] **Step 3: Implement schema**
+- [x] **Step 3: Implement schema**
 
 ```typescript
 // src/lib/schemas/cv.ts
@@ -309,7 +309,7 @@ export const cvContentSchema = z.object({
 export type CvContent = z.infer<typeof cvContentSchema>
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 ```bash
 npm run test -- src/lib/schemas/cv.test.ts
