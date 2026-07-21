@@ -430,6 +430,32 @@ body {
   stroke-dashoffset: 0;
 }
 
+.ai-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(139, 92, 246, 0.2),
+    rgba(34, 211, 238, 0.55),
+    rgba(139, 92, 246, 0.2)
+  );
+  background-size: 200% 100%;
+  animation: ai-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes ai-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-shimmer {
+    animation: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn-gradient,
   .text-shimmer,
