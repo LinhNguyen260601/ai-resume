@@ -1,13 +1,20 @@
 import { array, email, object, string } from 'zod'
 import type { infer as zodInfer } from 'zod'
 
+// LLM output frequently emits `null` for absent fields; coerce it to
+// `undefined` so `.optional()` semantics hold and the output type stays `string | undefined`.
+const optionalString = () =>
+  string()
+    .nullish()
+    .transform((value) => value ?? undefined)
+
 export const experienceEntrySchema = object({
   id: string(),
   company: string(),
   title: string(),
-  location: string().optional(),
+  location: optionalString(),
   startDate: string(),
-  endDate: string().optional(),
+  endDate: optionalString(),
   bullets: array(string()),
 })
 
@@ -15,11 +22,13 @@ export const cvContentSchema = object({
   personal: object({
     fullName: string(),
     email: email(),
-    phone: string().optional(),
-    location: string().optional(),
-    linkedin: string().optional(),
-    website: string().optional(),
-    summary: string(),
+    phone: optionalString(),
+    location: optionalString(),
+    linkedin: optionalString(),
+    website: optionalString(),
+    summary: string()
+      .nullish()
+      .transform((value) => value ?? ''),
   }),
   experience: array(experienceEntrySchema),
   education: array(
@@ -27,8 +36,8 @@ export const cvContentSchema = object({
       id: string(),
       institution: string(),
       degree: string(),
-      field: string().optional(),
-      graduationDate: string().optional(),
+      field: optionalString(),
+      graduationDate: optionalString(),
       bullets: array(string()).optional(),
     }),
   ),
@@ -41,8 +50,8 @@ export const cvContentSchema = object({
     object({
       id: string(),
       name: string(),
-      issuer: string().optional(),
-      date: string().optional(),
+      issuer: optionalString(),
+      date: optionalString(),
     }),
   ).optional(),
   projects: array(

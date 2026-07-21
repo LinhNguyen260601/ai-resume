@@ -43,3 +43,6 @@ Thumbs.db
 
 # Local agent/task artifacts
 todos.json
+
+# Git worktrees
+.worktrees/
