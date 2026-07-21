@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { Dropzone } from '#/components/upload/dropzone'
 import { ParsedCvSummary } from '#/components/upload/parsed-cv-summary'
 import { PreviousUploadsList } from '#/components/upload/previous-uploads-list'
@@ -27,6 +27,7 @@ function isBusyStage(
 
 function UploadPage() {
   const [highlightNewest, setHighlightNewest] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
   const baseCvs = useBaseCvs()
 
   async function handleConfirmed() {
@@ -65,7 +66,7 @@ function UploadPage() {
       <div className="relative mx-auto max-w-2xl space-y-8">
         <motion.h1
           className="text-3xl font-bold tracking-[-0.02em]"
-          initial={{ opacity: 0, y: 16 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
@@ -73,7 +74,7 @@ function UploadPage() {
         </motion.h1>
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
             delay: 0.08,
@@ -107,7 +108,7 @@ function UploadPage() {
 
         <motion.section
           className="space-y-3"
-          initial={{ opacity: 0, y: 16 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
             delay: 0.16,
@@ -118,11 +119,20 @@ function UploadPage() {
           <h2 className="text-lg font-semibold tracking-[-0.02em]">
             Previous uploads
           </h2>
-          <PreviousUploadsList
-            items={baseCvs.data}
-            isLoading={baseCvs.isLoading}
-            highlightNewest={highlightNewest}
-          />
+          {baseCvs.isError ? (
+            <p
+              role="alert"
+              className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+            >
+              Unable to load previous uploads. Please try again.
+            </p>
+          ) : (
+            <PreviousUploadsList
+              items={baseCvs.data}
+              isLoading={baseCvs.isLoading}
+              highlightNewest={highlightNewest}
+            />
+          )}
         </motion.section>
       </div>
     </main>
