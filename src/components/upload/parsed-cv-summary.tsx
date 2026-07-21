@@ -1,5 +1,5 @@
 import { Sparkles } from 'lucide-react'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { Button } from '#/components/ui/button'
 import {
   Card,
@@ -23,11 +23,17 @@ export function ParsedCvSummary({
   onLooksGood,
   onReParse,
 }: ParsedCvSummaryProps) {
+  const shouldReduceMotion = useReducedMotion()
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+      transition={
+        shouldReduceMotion
+          ? { duration: 0 }
+          : { type: 'spring', stiffness: 320, damping: 28 }
+      }
     >
       <Card className="rounded-2xl border-border bg-card/80 backdrop-blur-md">
         <CardHeader>

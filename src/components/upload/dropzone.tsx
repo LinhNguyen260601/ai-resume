@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { Upload } from 'lucide-react'
 import { Button } from '#/components/ui/button'
 import { cn } from '#/lib/utils'
@@ -12,6 +12,7 @@ type DropzoneProps = {
 
 export function Dropzone({ disabled, error, onFile }: DropzoneProps) {
   const [dragging, setDragging] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
 
   function handleDragOver(event: React.DragEvent<HTMLDivElement>) {
     event.preventDefault()
@@ -44,7 +45,7 @@ export function Dropzone({ disabled, error, onFile }: DropzoneProps) {
           ? { boxShadow: '0 0 0 1px #22D3EE, var(--glow-ai)' }
           : { boxShadow: '0 0 0 0 transparent' }
       }
-      transition={{ duration: 0.2 }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
       className={cn(
         'rounded-2xl border-2 border-dashed bg-card/80 p-12 text-center backdrop-blur-md',
         dragging ? 'border-secondary' : 'border-border',

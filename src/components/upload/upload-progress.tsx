@@ -1,5 +1,5 @@
 import { Check, Sparkles } from 'lucide-react'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import type { UploadStage } from '#/hooks/use-cv-upload'
 import { cn } from '#/lib/utils'
 
@@ -23,6 +23,7 @@ function stepIndex(stage: BusyStage) {
 
 export function UploadProgress({ stage }: UploadProgressProps) {
   const activeIndex = stepIndex(stage)
+  const shouldReduceMotion = useReducedMotion()
 
   function renderStep(step: (typeof STEPS)[number], index: number) {
     const done = index < activeIndex
@@ -31,14 +32,21 @@ export function UploadProgress({ stage }: UploadProgressProps) {
     return (
       <motion.li
         key={step.id}
-        layout
+        layout={!shouldReduceMotion}
+        aria-current={active ? 'step' : undefined}
         className={cn(
           'flex items-center gap-3 rounded-xl border px-4 py-3',
-          active && 'border-secondary/50 shadow-[var(--glow-ai)]',
+          active && 'border-secondary/50 shadow-(--glow-ai)',
           done && 'border-success/40',
           !active && !done && 'border-border opacity-60',
         )}
-        animate={active ? { scale: 1.02 } : { scale: 1 }}
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : active
+              ? { scale: 1.02 }
+              : { scale: 1 }
+        }
       >
         <span
           className={cn(

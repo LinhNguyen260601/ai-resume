@@ -1,4 +1,4 @@
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
 import { cvContentSchema } from '#/lib/schemas/cv'
 import { summarizeCvContent } from '#/models/cv-summary'
@@ -32,6 +32,8 @@ export function PreviousUploadsList({
   isLoading,
   highlightNewest,
 }: PreviousUploadsListProps) {
+  const shouldReduceMotion = useReducedMotion()
+
   if (isLoading) {
     return <p className="text-sm text-muted-foreground">Loading uploads…</p>
   }
@@ -49,13 +51,16 @@ export function PreviousUploadsList({
     return (
       <motion.div
         key={cv.id}
-        initial={{ opacity: 0, y: 12 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{
           opacity: 1,
           y: 0,
           boxShadow: isNewest ? 'var(--glow-ai)' : 'none',
         }}
-        transition={{ delay: index * 0.05, duration: 0.35 }}
+        transition={{
+          delay: shouldReduceMotion ? 0 : index * 0.05,
+          duration: shouldReduceMotion ? 0 : 0.35,
+        }}
       >
         <Card
           className={cn(
