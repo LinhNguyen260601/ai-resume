@@ -31,7 +31,7 @@ export function TemplatesSection() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.1}>
-          <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mx-auto flex w-max max-w-full gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {templates.map((template) => (
               <button
                 key={template.id}
