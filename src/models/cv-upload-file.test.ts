@@ -1,5 +1,5 @@
+import { validateCvUploadFile } from '#/models/cv-upload-file'
 import { describe, expect, it } from 'vitest'
-import { validateCvUploadFile } from './cv-upload-file'
 
 describe('validateCvUploadFile', () => {
   it('returns null for a valid PDF under 10MB', () => {

@@ -4,7 +4,7 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { ReactNode } from 'react'
 import { parseCvUpload } from '#/server/cv'
-import { useCvUpload } from './use-cv-upload'
+import { useCvUpload } from '#/hooks/use-cv-upload'
 
 vi.mock('#/server/cv', () => ({
   parseCvUpload: vi.fn(),
@@ -65,6 +65,10 @@ describe('useCvUpload', () => {
           fullName: 'Ada',
           email: 'ada@example.com',
           summary: 'x',
+          phone: undefined,
+          location: undefined,
+          linkedin: undefined,
+          website: undefined,
         },
         experience: [],
         education: [],
@@ -112,6 +116,10 @@ describe('useCvUpload', () => {
           fullName: 'Ada',
           email: 'ada@example.com',
           summary: 'x',
+          phone: undefined,
+          location: undefined,
+          linkedin: undefined,
+          website: undefined,
         },
         experience: [],
         education: [],

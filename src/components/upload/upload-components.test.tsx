@@ -4,10 +4,10 @@ import { createElement } from 'react'
 import type { ComponentProps, ElementType } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useReducedMotion } from 'motion/react'
-import { Dropzone } from './dropzone'
-import { ParsedCvSummary } from './parsed-cv-summary'
-import { PreviousUploadsList } from './previous-uploads-list'
-import { UploadProgress } from './upload-progress'
+import { Dropzone } from '#/components/upload/dropzone'
+import { UploadProgress } from '#/components/upload/upload-progress'
+import { ParsedCvSummary } from '#/components/upload/parsed-cv-summary'
+import { PreviousUploadsList } from '#/components/upload/previous-uploads-list'
 
 vi.mock('motion/react', function mockMotion() {
   function createMotionComponent<T extends ElementType>(element: T) {

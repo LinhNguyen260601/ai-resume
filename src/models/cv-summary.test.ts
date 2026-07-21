@@ -1,12 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import type { CvContent } from '#/lib/schemas/cv'
-import { summarizeCvContent } from './cv-summary'
+import { summarizeCvContent } from '#/models/cv-summary'
 
 function makeContent(overrides: Partial<CvContent> = {}): CvContent {
   return {
     personal: {
       fullName: 'Ada Lovelace',
       email: 'ada@example.com',
+      phone: undefined,
+      location: undefined,
+      linkedin: undefined,
+      website: undefined,
       summary: 'Mathematician',
     },
     experience: [
@@ -14,7 +18,9 @@ function makeContent(overrides: Partial<CvContent> = {}): CvContent {
         id: '1',
         company: 'Analytical Engines',
         title: 'Engineer',
+        location: undefined,
         startDate: '1840',
+        endDate: undefined,
         bullets: ['Wrote notes'],
       },
     ],
