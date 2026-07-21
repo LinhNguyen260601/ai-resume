@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { ENVIRONMENTS } from '#/constants'
 
-const { GEMINI_API_KEY } = ENVIRONMENTS
+const { GEMINI_API_KEY, GEMINI_MODEL } = ENVIRONMENTS
 
 export function createGemini() {
   if (!GEMINI_API_KEY) throw new Error('Missing GEMINI_API_KEY')
@@ -14,7 +14,7 @@ export async function generateStructuredJson<T>(
 ): Promise<T> {
   const genAI = createGemini()
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.5-flash',
+    model: GEMINI_MODEL,
     generationConfig: { responseMimeType: 'application/json' },
   })
   const result = await model.generateContent(
