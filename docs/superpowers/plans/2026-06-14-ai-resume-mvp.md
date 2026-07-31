@@ -738,7 +738,7 @@ function UploadPage() {
 
 - Create: `src/server/jobs.ts`
 
-- [ ] **Step 1: Implement scrape + create**
+- [x] **Step 1: Implement scrape + create**
 
 ```typescript
 // src/server/jobs.ts
