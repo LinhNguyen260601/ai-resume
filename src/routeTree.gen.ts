@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TailorJobIdRouteImport } from './routes/tailor/$jobId'
+import { Route as JobsNewRouteImport } from './routes/jobs/new'
 
 const UploadRoute = UploadRouteImport.update({
   id: '/upload',
@@ -22,31 +24,49 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TailorJobIdRoute = TailorJobIdRouteImport.update({
+  id: '/tailor/$jobId',
+  path: '/tailor/$jobId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsNewRoute = JobsNewRouteImport.update({
+  id: '/jobs/new',
+  path: '/jobs/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/upload': typeof UploadRoute
+  '/jobs/new': typeof JobsNewRoute
+  '/tailor/$jobId': typeof TailorJobIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/upload': typeof UploadRoute
+  '/jobs/new': typeof JobsNewRoute
+  '/tailor/$jobId': typeof TailorJobIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/upload': typeof UploadRoute
+  '/jobs/new': typeof JobsNewRoute
+  '/tailor/$jobId': typeof TailorJobIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/upload'
+  fullPaths: '/' | '/upload' | '/jobs/new' | '/tailor/$jobId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/upload'
-  id: '__root__' | '/' | '/upload'
+  to: '/' | '/upload' | '/jobs/new' | '/tailor/$jobId'
+  id: '__root__' | '/' | '/upload' | '/jobs/new' | '/tailor/$jobId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   UploadRoute: typeof UploadRoute
+  JobsNewRoute: typeof JobsNewRoute
+  TailorJobIdRoute: typeof TailorJobIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +85,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tailor/$jobId': {
+      id: '/tailor/$jobId'
+      path: '/tailor/$jobId'
+      fullPath: '/tailor/$jobId'
+      preLoaderRoute: typeof TailorJobIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs/new': {
+      id: '/jobs/new'
+      path: '/jobs/new'
+      fullPath: '/jobs/new'
+      preLoaderRoute: typeof JobsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   UploadRoute: UploadRoute,
+  JobsNewRoute: JobsNewRoute,
+  TailorJobIdRoute: TailorJobIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

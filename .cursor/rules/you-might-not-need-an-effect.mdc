@@ -1,0 +1,70 @@
+---
+description: Prefer calculate-during-render and event handlers over useEffect (React docs)
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# You Might Not Need an Effect
+
+Reference: [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect).
+
+Effects synchronize with **external systems** (DOM APIs, third-party widgets, non-React subscriptions). Do **not** use Effects to transform data for render or to react to user events.
+
+## Prefer these instead
+
+| Temptation | Do this |
+|---|---|
+| Sync state A from props/state B | Calculate during render: `const x = f(props, state)` |
+| Expensive derived value | Calculate during render; rely on React Compiler (avoid manual `useMemo` by default) |
+| Reset all state when an ID/prop changes | Remount with `key={id}` on a child component |
+| Adjust one piece of state when props change | Store previous prop and adjust during render, or derive if possible |
+| POST / notify / navigate on click | Put logic in the event handler |
+| Notify parent of state change | Call parent callback from the event that caused the change |
+| Chains of `setState` in Effects | Derive values or fold into the event handler |
+
+## Good Effect uses
+
+- Focus, scroll, measure DOM (`useLayoutEffect` when paint-sensitive)
+- Subscribing to `window` / WebSocket / external store (prefer `useSyncExternalStore` when applicable)
+- Imperative third-party widgets
+- Data fetching only when not already handled by TanStack Query / route loaders
+
+## Examples
+
+```tsx
+// ❌ BAD — redundant state + Effect
+const [fullName, setFullName] = useState('')
+useEffect(() => {
+  setFullName(`${firstName} ${lastName}`)
+}, [firstName, lastName])
+
+// ✅ GOOD — calculate during render
+const fullName = `${firstName} ${lastName}`
+```
+
+```tsx
+// ❌ BAD — sync mode from props in an Effect
+useEffect(() => {
+  if (forceEdit) setMode('edit')
+}, [forceEdit])
+
+// ✅ GOOD — derive when the prop must win
+const mode = forceEdit ? 'edit' : (userMode ?? defaultMode)
+```
+
+```tsx
+// ❌ BAD — fetch/notify in Effect after click sets a flag
+useEffect(() => {
+  if (submitted) sendRequest(data)
+}, [submitted, data])
+
+// ✅ GOOD — do it in the click handler
+async function handleSubmit() {
+  await sendRequest(data)
+}
+```
+
+## Project notes
+
+- Follow `.cursor/rules/modular-react.mdc`: data loading belongs in hooks + TanStack Query, not `useEffect` in components.
+- Do not add `useMemo`/`useCallback` by default; this app uses React Compiler.
