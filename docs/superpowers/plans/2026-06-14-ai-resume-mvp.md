@@ -68,7 +68,7 @@ npm run dev
 
 Expected: App at `http://localhost:3000`
 
-- [ ] **Step 3: Create `.env.example`**
+- [ ] **Step 3: Create** `.env.example`
 
 ```bash
 # .env.example
@@ -185,7 +185,7 @@ In Supabase dashboard → Storage, create:
 - `cv-uploads` (private)
 - `cv-exports` (private)
 
-- [ ] **Step 4: Set `.env`**
+- [ ] **Step 4: Set** `.env`
 
 ```bash
 VITE_DEFAULT_PROFILE_ID=00000000-0000-0000-0000-000000000001
@@ -442,7 +442,7 @@ describe('isLowTextQuality', () => {
 - Create: `src/lib/url-scrape.ts`
 - Test: `src/lib/ssrf.test.ts`
 
-- [ ] **Step 1: SSRF guard**
+- [x] **Step 1: SSRF guard**
 
 ```typescript
 // src/lib/ssrf.ts
@@ -465,7 +465,7 @@ export function assertPublicUrl(input: string): URL {
 }
 ```
 
-- [ ] **Step 2: URL scrape**
+- [x] **Step 2: URL scrape**
 
 ```typescript
 // src/lib/url-scrape.ts
@@ -493,7 +493,7 @@ export async function fetchAndExtractJobText(url: string): Promise<string> {
 
 Note: install `linkedom` for server-side DOM: `npm install linkedom`
 
-- [ ] **Step 3: SSRF test**
+- [x] **Step 3: SSRF test**
 
 ```typescript
 // src/lib/ssrf.test.ts
@@ -520,7 +520,7 @@ describe('assertPublicUrl', () => {
 
 - Create: `src/server/cv.ts`
 
-- [ ] **Step 1: Implement `parseCvUpload`**
+- [ ] **Step 1: Implement** `parseCvUpload`
 
 ```typescript
 // src/server/cv.ts
@@ -837,7 +837,7 @@ Build `JobForm.tsx` with:
 - Fields: company name, job title (pre-filled from scrape)
 - Submit calls `createJobPosting` → navigate to `/tailor/$jobId`
 
-- [ ] **Step 2: Route at `src/routes/jobs/new.tsx`**
+- [ ] **Step 2: Route at** `src/routes/jobs/new.tsx`
 
 Wire up form with TanStack Router `useNavigate` to redirect on success.
 
@@ -912,7 +912,7 @@ ${job.extracted_text}`,
   })
 ```
 
-- [ ] **Step 2: Tailor route `src/routes/tailor/$jobId.tsx`**
+- [ ] **Step 2: Tailor route** `src/routes/tailor/$jobId.tsx`
 
 - List base CVs (radio select)
 - "Tailor CV" button → `tailorCvForJob` → navigate to `/editor/$tailoredCvId`
