@@ -1,9 +1,12 @@
 import { generateStructuredJson } from '#/lib/gemini'
 import {
+  buildJobMarkdownPrompt,
+  JOB_MARKDOWN_SCHEMA_DESC,
+} from '#/lib/job-markdown'
+import {
   createJobPostingSchema,
   extractedTextSchema,
   jobMetaSchema,
-  jobTitleCompanySchema,
   scrapeJobUrlSchema,
 } from '#/lib/schemas/job'
 import { createServerSupabase, getDefaultProfileId } from '#/lib/supabase'
@@ -23,17 +26,12 @@ export const scrapeJobUrl = createServerFn({ method: 'POST' })
       text = extractedTextSchema.parse(recovered).extracted_text
     }
 
-    const meta = await generateStructuredJson<unknown>(
-      `Extract company name and job title from this posting:\n\n${text}`,
-      '{ company_name?: string, job_title?: string }',
+    const formatted = await generateStructuredJson<unknown>(
+      buildJobMarkdownPrompt(text),
+      JOB_MARKDOWN_SCHEMA_DESC,
     )
-    const { company_name, job_title } = jobTitleCompanySchema.parse(meta)
 
-    return jobMetaSchema.parse({
-      extracted_text: text,
-      company_name: company_name ?? undefined,
-      job_title: job_title ?? undefined,
-    })
+    return jobMetaSchema.parse(formatted)
   })
 
 export const createJobPosting = createServerFn({ method: 'POST' })
