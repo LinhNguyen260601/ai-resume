@@ -1,19 +1,10 @@
 import { createServerFn } from '@tanstack/react-start'
 import { v4 as uuid } from 'uuid'
-import { cvContentSchema } from '#/lib/schemas/cv'
+import { CV_SCHEMA_DESC, cvContentSchema } from '#/lib/schemas/cv'
 import { cvUploadSchema } from '#/lib/schemas/cv-upload'
 import { createServerSupabase, getDefaultProfileId } from '#/lib/supabase'
 import { generateStructuredJson } from '#/lib/gemini'
 import { extractTextFromFile, isLowTextQuality } from '#/lib/pdf-extract'
-
-const CV_SCHEMA_DESC = `{
-  personal: { fullName, email, phone?, location?, linkedin?, website?, summary },
-  experience: [{ id, company, title, location?, startDate, endDate?, bullets[] }],
-  education: [{ id, institution, degree, field?, graduationDate?, bullets?[] }],
-  skills: { technical[], soft?[], languages?[] },
-  certifications?: [{ id, name, issuer?, date? }],
-  projects?: [{ id, name, description, bullets?[] }]
-}`
 
 export async function parseCvUploadFromFormData(data: FormData) {
   const { file } = cvUploadSchema.parse(data)
@@ -65,13 +56,15 @@ export const parseCvUpload = createServerFn({ method: 'POST' })
   .validator(cvUploadSchema)
   .handler(async ({ data }) => parseCvUploadFile(data.file))
 
-export const listBaseCvs = createServerFn({ method: 'GET' }).handler(async () => {
-  const supabase = createServerSupabase()
-  const { data, error } = await supabase
-    .from('base_cvs')
-    .select('id, file_name, content, created_at')
-    .eq('profile_id', getDefaultProfileId())
-    .order('created_at', { ascending: false })
-  if (error) throw error
-  return data
-})
+export const listBaseCvs = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const supabase = createServerSupabase()
+    const { data, error } = await supabase
+      .from('base_cvs')
+      .select('id, file_name, content, created_at')
+      .eq('profile_id', getDefaultProfileId())
+      .order('created_at', { ascending: false })
+    if (error) throw error
+    return data
+  },
+)
