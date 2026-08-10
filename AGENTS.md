@@ -38,6 +38,13 @@ If unsure whether a skill applies, read it anyway — false positives are cheape
 
 Manage skills: `npx skills add`, `npx skills check`, `npx skills update`. See `skills-lock.json`.
 
+## Claude Code notes
+
+`CLAUDE.md` is a symlink to this file — Claude Code auto-loads it and reads the same routing table and stack defaults as every other agent here. A few things specific to Claude Code:
+
+- **Skills are natively discoverable.** `.claude/skills/<name>` symlinks to each `.agents/skills/<name>` directory, so they show up in Claude Code's Skill tool listing and can be invoked directly instead of manually `Read`-ing `SKILL.md` files. `npx skills update` keeps both in sync since it's the same file on disk.
+- **The `superpowers` plugin is active** for planning, systematic debugging, and TDD workflows (`.superpowers/sdd/` holds artifacts from prior sessions). Its process skills (brainstorming, systematic-debugging, writing-plans, etc.) take priority over the stack/UI/quality skills below — see Priority order in `.cursor/rules/agent-skills.mdc`.
+
 ## Stack defaults
 
 - **UI:** shadcn + ResumeAI design system (`.cursor/rules/design-system.mdc`)

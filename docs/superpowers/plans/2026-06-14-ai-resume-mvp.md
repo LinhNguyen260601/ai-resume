@@ -828,7 +828,7 @@ export const listJobPostings = createServerFn({ method: 'GET' }).handler(
 - Create: `src/components/jobs/JobForm.tsx`
 - Create: `src/routes/jobs/new.tsx`
 
-- [ ] **Step 1: JobForm with paste/URL tabs**
+- [x] **Step 1: JobForm with paste/URL tabs**
 
 Build `JobForm.tsx` with:
 
@@ -837,7 +837,7 @@ Build `JobForm.tsx` with:
 - Fields: company name, job title (pre-filled from scrape)
 - Submit calls `createJobPosting` → navigate to `/tailor/$jobId`
 
-- [ ] **Step 2: Route at** `src/routes/jobs/new.tsx`
+- [x] **Step 2: Route at** `src/routes/jobs/new.tsx`
 
 Wire up form with TanStack Router `useNavigate` to redirect on success.
 
