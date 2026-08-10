@@ -65,3 +65,12 @@ export const cvContentSchema = object({
 })
 
 export type CvContent = zodInfer<typeof cvContentSchema>
+
+export const CV_SCHEMA_DESC = `{
+  personal: { fullName, email, phone?, location?, linkedin?, website?, summary },
+  experience: [{ id, company, title, location?, startDate, endDate?, bullets[] }],
+  education: [{ id, institution, degree, field?, graduationDate?, bullets?[] }],
+  skills: { technical[], soft?[], languages?[] },
+  certifications?: [{ id, name, issuer?, date? }],
+  projects?: [{ id, name, description, bullets?[] }]
+}`
