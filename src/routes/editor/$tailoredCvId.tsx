@@ -187,7 +187,7 @@ function EditorPageContent({ tailoredCvId }: { tailoredCvId: string }) {
         </div>
 
         <div className="min-h-0 overflow-y-auto bg-muted/30 px-6 py-6">
-          <CvPreview content={content} />
+          <CvPreview content={content} templateId={editor.templateId} />
         </div>
       </div>
     </main>
