@@ -996,7 +996,7 @@ Dropdown changes `template_id` and preview instantly.
 - Create: `src/templates/compact.tsx`
 - Create: `src/lib/templates.ts`
 
-- [ ] **Step 1: Template registry**
+- [x] **Step 1: Template registry**
 
 ```typescript
 // src/lib/templates.ts
@@ -1023,11 +1023,11 @@ export function getTemplateComponent(
 }
 ```
 
-- [ ] **Step 2: Implement four template components**
+- [x] **Step 2: Implement four template components**
 
 Each accepts `{ content: CvContent }` and renders print-friendly HTML with Tailwind. Use semantic sections with `break-inside-avoid` on experience blocks.
 
-- [ ] **Step 3: CvPreview wrapper**
+- [x] **Step 3: CvPreview wrapper**
 
 ```tsx
 // src/components/cv/CvPreview.tsx
