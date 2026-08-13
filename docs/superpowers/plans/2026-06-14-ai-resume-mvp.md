@@ -849,7 +849,7 @@ Wire up form with TanStack Router `useNavigate` to redirect on success.
 
 - Create: `src/server/tailor.ts`
 
-- [ ] **Step 1: Implement tailor**
+- [x] **Step 1: Implement tailor**
 
 ```typescript
 // src/server/tailor.ts
@@ -912,7 +912,7 @@ ${job.extracted_text}`,
   })
 ```
 
-- [ ] **Step 2: Tailor route** `src/routes/tailor/$jobId.tsx`
+- [x] **Step 2: Tailor route** `src/routes/tailor/$jobId.tsx`
 
 - List base CVs (radio select)
 - "Tailor CV" button → `tailorCvForJob` → navigate to `/editor/$tailoredCvId`
@@ -929,7 +929,7 @@ ${job.extracted_text}`,
 - Create: `src/server/tailored.ts` (get + update)
 - Create: `src/routes/editor/$tailoredCvId.tsx`
 
-- [ ] **Step 1: CRUD server functions**
+- [x] **Step 1: CRUD server functions**
 
 ```typescript
 // src/server/tailored.ts
@@ -970,17 +970,17 @@ export const updateTailoredCv = createServerFn({ method: 'POST' })
   })
 ```
 
-- [ ] **Step 2: Editor page — split layout**
+- [x] **Step 2: Editor page — split layout**
 
 Left: TanStack Form fields for personal, summary, experience (with add/remove bullet buttons), education, skills.
 
 Right: `CvPreview` renders selected template with current form values.
 
-- [ ] **Step 3: Auto-save**
+- [x] **Step 3: Auto-save**
 
 Debounce 1s → `updateTailoredCv` mutation via TanStack Query.
 
-- [ ] **Step 4: Template switcher in top bar**
+- [x] **Step 4: Template switcher in top bar**
 
 Dropdown changes `template_id` and preview instantly.
 
