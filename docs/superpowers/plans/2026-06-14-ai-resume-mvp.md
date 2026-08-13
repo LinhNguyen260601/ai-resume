@@ -1062,7 +1062,7 @@ export function CvPreview({
 - Create: `src/server/export.ts`
 - Create: `src/routes/export/$tailoredCvId.tsx`
 
-- [ ] **Step 1: Export server function**
+- [x] **Step 1: Export server function**
 
 ```typescript
 // src/server/export.ts
@@ -1099,7 +1099,7 @@ export const exportPdf = createServerFn({ method: 'POST' })
   })
 ```
 
-- [ ] **Step 2: Export page**
+- [x] **Step 2: Export page**
 
 Grid of 4 template thumbnails, live preview, "Download PDF" decodes base64 and triggers browser download.
 
