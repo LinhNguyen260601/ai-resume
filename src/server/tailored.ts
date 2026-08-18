@@ -19,6 +19,21 @@ export const getTailoredCv = createServerFn({ method: 'GET' })
     return row
   })
 
+export const listTailoredCvs = createServerFn({ method: 'GET' }).handler(
+  async () => {
+    const supabase = createServerSupabase()
+    const { data, error } = await supabase
+      .from('tailored_cvs')
+      .select(
+        'id, title, template_id, created_at, updated_at, job_postings(company_name, job_title)',
+      )
+      .eq('profile_id', getDefaultProfileId())
+      .order('updated_at', { ascending: false })
+    if (error) throw error
+    return data
+  },
+)
+
 export const updateTailoredCv = createServerFn({ method: 'POST' })
   .validator(updateTailoredCvSchema)
   .handler(async ({ data }) => {

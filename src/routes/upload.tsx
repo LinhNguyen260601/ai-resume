@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { motion, useReducedMotion } from 'motion/react'
+import { AppShell } from '#/components/layout/app-shell'
 import { Dropzone } from '#/components/upload/dropzone'
 import { ParsedCvSummary } from '#/components/upload/parsed-cv-summary'
 import { PreviousUploadsList } from '#/components/upload/previous-uploads-list'
@@ -54,87 +55,89 @@ function UploadPage() {
     upload.result !== null ? summarizeCvContent(upload.result.content) : null
 
   return (
-    <main className="relative min-h-screen bg-background px-4 py-10">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-      >
-        <div className="absolute -left-24 top-10 size-72 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -right-16 top-40 size-64 rounded-full bg-secondary/10 blur-3xl" />
-      </div>
-
-      <div className="relative mx-auto max-w-2xl space-y-8">
-        <motion.h1
-          className="text-3xl font-bold tracking-[-0.02em]"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+    <AppShell>
+      <main className="relative min-h-screen px-4 py-10">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden"
         >
-          Upload CV
-        </motion.h1>
+          <div className="absolute -left-24 top-10 size-72 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute -right-16 top-40 size-64 rounded-full bg-secondary/10 blur-3xl" />
+        </div>
 
-        <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            delay: 0.08,
-            duration: 0.45,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-        >
-          {upload.stage === 'idle' || upload.stage === 'review' ? (
-            <Dropzone
-              disabled={upload.isBusy}
-              error={upload.error}
-              onFile={handleFile}
-            />
-          ) : null}
+        <div className="relative mx-auto max-w-2xl space-y-8">
+          <motion.h1
+            className="text-3xl font-bold tracking-[-0.02em]"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Upload CV
+          </motion.h1>
 
-          {isBusyStage(upload.stage) ? (
-            <UploadProgress stage={upload.stage} />
-          ) : null}
-
-          {upload.stage === 'review' && summary && upload.result ? (
-            <div className="mt-6">
-              <ParsedCvSummary
-                stats={summary}
-                fileName={upload.result.baseCv.file_name}
-                onLooksGood={handleLooksGood}
-                onReParse={handleReParse}
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.08,
+              duration: 0.45,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+          >
+            {upload.stage === 'idle' || upload.stage === 'review' ? (
+              <Dropzone
+                disabled={upload.isBusy}
+                error={upload.error}
+                onFile={handleFile}
               />
-            </div>
-          ) : null}
-        </motion.div>
+            ) : null}
 
-        <motion.section
-          className="space-y-3"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            delay: 0.16,
-            duration: 0.45,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-        >
-          <h2 className="text-lg font-semibold tracking-[-0.02em]">
-            Previous uploads
-          </h2>
-          {baseCvs.isError ? (
-            <p
-              role="alert"
-              className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-            >
-              Unable to load previous uploads. Please try again.
-            </p>
-          ) : (
-            <PreviousUploadsList
-              items={baseCvs.data}
-              isLoading={baseCvs.isLoading}
-              highlightNewest={highlightNewest}
-            />
-          )}
-        </motion.section>
-      </div>
-    </main>
+            {isBusyStage(upload.stage) ? (
+              <UploadProgress stage={upload.stage} />
+            ) : null}
+
+            {upload.stage === 'review' && summary && upload.result ? (
+              <div className="mt-6">
+                <ParsedCvSummary
+                  stats={summary}
+                  fileName={upload.result.baseCv.file_name}
+                  onLooksGood={handleLooksGood}
+                  onReParse={handleReParse}
+                />
+              </div>
+            ) : null}
+          </motion.div>
+
+          <motion.section
+            className="space-y-3"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.16,
+              duration: 0.45,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+          >
+            <h2 className="text-lg font-semibold tracking-[-0.02em]">
+              Previous uploads
+            </h2>
+            {baseCvs.isError ? (
+              <p
+                role="alert"
+                className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+              >
+                Unable to load previous uploads. Please try again.
+              </p>
+            ) : (
+              <PreviousUploadsList
+                items={baseCvs.data}
+                isLoading={baseCvs.isLoading}
+                highlightNewest={highlightNewest}
+              />
+            )}
+          </motion.section>
+        </div>
+      </main>
+    </AppShell>
   )
 }

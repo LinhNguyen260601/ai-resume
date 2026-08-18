@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import { ArrowRight, Menu, Sparkles, X } from 'lucide-react'
 
 import { Button } from '#/components/ui/button.tsx'
@@ -29,7 +30,7 @@ export function LandingNavbar() {
         isScrolled && 'is-scrolled',
       )}
     >
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-6 lg:px-10">
+      <div className="mx-auto flex h-16 max-w-360 items-center justify-between gap-4 px-6 lg:px-10">
         <a
           href="/"
           className="flex items-center gap-2 text-lg font-bold tracking-tight text-foreground"
@@ -66,11 +67,14 @@ export function LandingNavbar() {
             Log in
           </Button>
           <Button
+            asChild
             size="sm"
             className="btn-gradient hidden rounded-xl border-0 px-4 font-semibold sm:inline-flex"
           >
-            Get Started Free
-            <ArrowRight data-icon="inline-end" />
+            <Link to="/dashboard">
+              Get Started Free
+              <ArrowRight data-icon="inline-end" />
+            </Link>
           </Button>
 
           <Button
@@ -96,7 +100,7 @@ export function LandingNavbar() {
           mobileOpen ? 'block' : 'hidden',
         )}
       >
-        <nav className="mx-auto flex max-w-[1440px] flex-col gap-1 px-6 py-4">
+        <nav className="mx-auto flex max-w-360 flex-col gap-1 px-6 py-4">
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -119,9 +123,14 @@ export function LandingNavbar() {
             >
               Log in
             </Button>
-            <Button className="btn-gradient w-full rounded-xl border-0 font-semibold">
-              Get Started Free
-              <ArrowRight data-icon="inline-end" />
+            <Button
+              asChild
+              className="btn-gradient w-full rounded-xl border-0 font-semibold"
+            >
+              <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
+                Get Started Free
+                <ArrowRight data-icon="inline-end" />
+              </Link>
             </Button>
           </div>
         </nav>

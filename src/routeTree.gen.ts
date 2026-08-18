@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UploadRouteImport } from './routes/upload'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TailorJobIdRouteImport } from './routes/tailor/$jobId'
 import { Route as JobsNewRouteImport } from './routes/jobs/new'
@@ -19,6 +20,11 @@ import { Route as EditorTailoredCvIdRouteImport } from './routes/editor/$tailore
 const UploadRoute = UploadRouteImport.update({
   id: '/upload',
   path: '/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -49,6 +55,7 @@ const EditorTailoredCvIdRoute = EditorTailoredCvIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/upload': typeof UploadRoute
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
   '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/upload': typeof UploadRoute
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
   '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/upload': typeof UploadRoute
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
   '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/upload'
     | '/editor/$tailoredCvId'
     | '/export/$tailoredCvId'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard'
     | '/upload'
     | '/editor/$tailoredCvId'
     | '/export/$tailoredCvId'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/dashboard'
     | '/upload'
     | '/editor/$tailoredCvId'
     | '/export/$tailoredCvId'
@@ -101,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
   UploadRoute: typeof UploadRoute
   EditorTailoredCvIdRoute: typeof EditorTailoredCvIdRoute
   ExportTailoredCvIdRoute: typeof ExportTailoredCvIdRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/upload'
       fullPath: '/upload'
       preLoaderRoute: typeof UploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -157,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   UploadRoute: UploadRoute,
   EditorTailoredCvIdRoute: EditorTailoredCvIdRoute,
   ExportTailoredCvIdRoute: ExportTailoredCvIdRoute,

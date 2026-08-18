@@ -10,7 +10,12 @@ import {
   vi,
 } from 'vitest'
 import { createElement } from 'react'
-import type { ComponentProps, ComponentType, ElementType } from 'react'
+import type {
+  ComponentProps,
+  ComponentType,
+  ElementType,
+  ReactNode,
+} from 'react'
 import { useReducedMotion } from 'motion/react'
 import { useJobForm } from '#/hooks/use-job-form'
 import { emptyJobFormValues } from '#/models/job-form'
@@ -57,6 +62,14 @@ vi.mock('@tanstack/react-router', async function mockRouter() {
 
 vi.mock('#/hooks/use-job-form', function mockJobFormHook() {
   return { useJobForm: vi.fn() }
+})
+
+vi.mock('#/components/layout/app-shell', function mockAppShell() {
+  return {
+    AppShell: function AppShellStub({ children }: { children: ReactNode }) {
+      return createElement('div', null, children)
+    },
+  }
 })
 
 const mockedUseReducedMotion = vi.mocked(useReducedMotion)
