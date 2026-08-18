@@ -17,6 +17,8 @@ import { createServerFn } from '@tanstack/react-start'
 export const scrapeJobUrl = createServerFn({ method: 'POST' })
   .validator(scrapeJobUrlSchema)
   .handler(async ({ data }) => {
+    await getCurrentProfile()
+
     let text = await fetchAndExtractJobText(data.url)
 
     if (text.length < 100) {
