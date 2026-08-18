@@ -13,6 +13,8 @@ export async function parseCvUploadFromFormData(data: FormData) {
 }
 
 async function parseCvUploadFile(file: File) {
+  const profile = await getCurrentProfile()
+
   const buffer = Buffer.from(await file.arrayBuffer())
   const rawText = await extractTextFromFile(buffer, file.type)
   if (isLowTextQuality(rawText)) {
@@ -27,7 +29,6 @@ async function parseCvUploadFile(file: File) {
   )
   const content = cvContentSchema.parse(parsed)
 
-  const profile = await getCurrentProfile()
   const supabase = createServerSupabase()
   const fileId = uuid()
   const ext = file.type === 'application/pdf' ? 'pdf' : 'docx'
