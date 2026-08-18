@@ -10,7 +10,7 @@ import {
   vi,
 } from 'vitest'
 import { createElement } from 'react'
-import type { ComponentProps, ComponentType, ElementType } from 'react'
+import type { ComponentProps, ComponentType, ElementType, ReactNode } from 'react'
 import { useReducedMotion } from 'motion/react'
 import { useBaseCvs } from '#/hooks/use-base-cvs'
 import { Route } from './upload'
@@ -41,6 +41,14 @@ vi.mock('motion/react', function mockMotion() {
       section: createMotionComponent('section'),
     },
     useReducedMotion: vi.fn(),
+  }
+})
+
+vi.mock('#/components/layout/app-shell', function mockAppShell() {
+  return {
+    AppShell: function AppShellStub({ children }: { children: ReactNode }) {
+      return createElement('div', null, children)
+    },
   }
 })
 

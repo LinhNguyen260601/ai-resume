@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
+import { formatDate } from '#/lib/format-date'
 import { cvContentSchema } from '#/lib/schemas/cv'
 import { summarizeCvContent } from '#/models/cv-summary'
 import { cn } from '#/lib/utils'
@@ -21,10 +22,6 @@ function displayName(content: unknown) {
   const parsed = cvContentSchema.safeParse(content)
   if (!parsed.success) return 'Unknown'
   return summarizeCvContent(parsed.data).fullName
-}
-
-function formatDate(value: string) {
-  return new Date(value).toLocaleDateString()
 }
 
 export function PreviousUploadsList({

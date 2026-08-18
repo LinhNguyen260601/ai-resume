@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
 import type { BaseCvListItem } from '#/components/upload/previous-uploads-list'
+import { formatDate } from '#/lib/format-date'
 import { cvContentSchema } from '#/lib/schemas/cv'
 import { cn } from '#/lib/utils'
 import { summarizeCvContent } from '#/models/cv-summary'
@@ -16,10 +17,6 @@ function displayName(content: unknown) {
   const parsed = cvContentSchema.safeParse(content)
   if (!parsed.success) return 'Unknown'
   return summarizeCvContent(parsed.data).fullName
-}
-
-function formatDate(value: string) {
-  return new Date(value).toLocaleDateString()
 }
 
 export function BaseCvPicker({
