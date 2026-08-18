@@ -11,6 +11,7 @@ import {
 
 export const profiles = pgTable('profiles', {
   id: uuid('id').primaryKey().defaultRandom(),
+  clerkUserId: text('clerk_user_id').notNull().unique(),
   displayName: text('display_name').notNull().default('Default User'),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
