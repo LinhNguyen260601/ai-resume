@@ -13,6 +13,7 @@ import { Route as UploadRouteImport } from './routes/upload'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TailorJobIdRouteImport } from './routes/tailor/$jobId'
 import { Route as JobsNewRouteImport } from './routes/jobs/new'
+import { Route as ExportTailoredCvIdRouteImport } from './routes/export/$tailoredCvId'
 import { Route as EditorTailoredCvIdRouteImport } from './routes/editor/$tailoredCvId'
 
 const UploadRoute = UploadRouteImport.update({
@@ -35,6 +36,11 @@ const JobsNewRoute = JobsNewRouteImport.update({
   path: '/jobs/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExportTailoredCvIdRoute = ExportTailoredCvIdRouteImport.update({
+  id: '/export/$tailoredCvId',
+  path: '/export/$tailoredCvId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EditorTailoredCvIdRoute = EditorTailoredCvIdRouteImport.update({
   id: '/editor/$tailoredCvId',
   path: '/editor/$tailoredCvId',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/upload': typeof UploadRoute
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
+  '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
   '/jobs/new': typeof JobsNewRoute
   '/tailor/$jobId': typeof TailorJobIdRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/upload': typeof UploadRoute
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
+  '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
   '/jobs/new': typeof JobsNewRoute
   '/tailor/$jobId': typeof TailorJobIdRoute
 }
@@ -60,6 +68,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/upload': typeof UploadRoute
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
+  '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
   '/jobs/new': typeof JobsNewRoute
   '/tailor/$jobId': typeof TailorJobIdRoute
 }
@@ -69,15 +78,23 @@ export interface FileRouteTypes {
     | '/'
     | '/upload'
     | '/editor/$tailoredCvId'
+    | '/export/$tailoredCvId'
     | '/jobs/new'
     | '/tailor/$jobId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/upload' | '/editor/$tailoredCvId' | '/jobs/new' | '/tailor/$jobId'
+  to:
+    | '/'
+    | '/upload'
+    | '/editor/$tailoredCvId'
+    | '/export/$tailoredCvId'
+    | '/jobs/new'
+    | '/tailor/$jobId'
   id:
     | '__root__'
     | '/'
     | '/upload'
     | '/editor/$tailoredCvId'
+    | '/export/$tailoredCvId'
     | '/jobs/new'
     | '/tailor/$jobId'
   fileRoutesById: FileRoutesById
@@ -86,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   UploadRoute: typeof UploadRoute
   EditorTailoredCvIdRoute: typeof EditorTailoredCvIdRoute
+  ExportTailoredCvIdRoute: typeof ExportTailoredCvIdRoute
   JobsNewRoute: typeof JobsNewRoute
   TailorJobIdRoute: typeof TailorJobIdRoute
 }
@@ -120,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JobsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/export/$tailoredCvId': {
+      id: '/export/$tailoredCvId'
+      path: '/export/$tailoredCvId'
+      fullPath: '/export/$tailoredCvId'
+      preLoaderRoute: typeof ExportTailoredCvIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/editor/$tailoredCvId': {
       id: '/editor/$tailoredCvId'
       path: '/editor/$tailoredCvId'
@@ -134,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   UploadRoute: UploadRoute,
   EditorTailoredCvIdRoute: EditorTailoredCvIdRoute,
+  ExportTailoredCvIdRoute: ExportTailoredCvIdRoute,
   JobsNewRoute: JobsNewRoute,
   TailorJobIdRoute: TailorJobIdRoute,
 }
