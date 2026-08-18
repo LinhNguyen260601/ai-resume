@@ -1,5 +1,15 @@
 # ResumeAI — Agent Instructions
 
+## Always-apply rules (required, every task)
+
+These mirror Cursor's `alwaysApply: true` rules — read before any plan/code/answer, regardless of task type (no matching needed, unlike skills below):
+
+- [`.cursor/rules/conventional-commits.mdc`](.cursor/rules/conventional-commits.mdc) — commit message format when drafting or writing commits
+- [`.cursor/rules/modular-react.mdc`](.cursor/rules/modular-react.mdc) — view/domain/data layering for all React code
+- [`.cursor/rules/design-system.mdc`](.cursor/rules/design-system.mdc) — ResumeAI UI system for all UI work
+
+**Conditional** (read when touching `src/**/*.{ts,tsx}`): [`.cursor/rules/you-might-not-need-an-effect.mdc`](.cursor/rules/you-might-not-need-an-effect.mdc) — prefer calculate-during-render/event-handlers over `useEffect`.
+
 ## Skills (required)
 
 This project uses agent skills in **`.agents/skills/`**. You must apply them automatically — the user should not have to `@`-mention skills on every prompt.

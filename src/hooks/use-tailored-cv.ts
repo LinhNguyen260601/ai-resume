@@ -98,14 +98,11 @@ export function useTailoredCv({ tailoredCvId }: UseTailoredCvOptions) {
     if (content) scheduleSave(content, next)
   }
 
-  useEffect(
-    function cleanupSaveTimer() {
-      return function onUnmount() {
-        if (saveTimerRef.current !== null) clearTimeout(saveTimerRef.current)
-      }
-    },
-    [],
-  )
+  useEffect(function cleanupSaveTimer() {
+    return function onUnmount() {
+      if (saveTimerRef.current !== null) clearTimeout(saveTimerRef.current)
+    }
+  }, [])
 
   const jobPostingsData = query.data?.job_postings
   const jobPosting = Array.isArray(jobPostingsData)
@@ -122,8 +119,10 @@ export function useTailoredCv({ tailoredCvId }: UseTailoredCvOptions) {
     jobTitle: jobPosting?.job_title ?? null,
     saveStatus,
     setTemplateId,
-    updatePersonalField: (field: Parameters<typeof updatePersonalField>[1], value: string) =>
-      applyEdit((current) => updatePersonalField(current, field, value)),
+    updatePersonalField: (
+      field: Parameters<typeof updatePersonalField>[1],
+      value: string,
+    ) => applyEdit((current) => updatePersonalField(current, field, value)),
     updateSummary: (value: string) =>
       applyEdit((current) => updateSummary(current, value)),
     addExperience: () => applyEdit(addExperience),
@@ -138,9 +137,7 @@ export function useTailoredCv({ tailoredCvId }: UseTailoredCvOptions) {
     addExperienceBullet: (id: string) =>
       applyEdit((current) => addExperienceBullet(current, id)),
     updateExperienceBullet: (id: string, index: number, value: string) =>
-      applyEdit((current) =>
-        updateExperienceBullet(current, id, index, value),
-      ),
+      applyEdit((current) => updateExperienceBullet(current, id, index, value)),
     removeExperienceBullet: (id: string, index: number) =>
       applyEdit((current) => removeExperienceBullet(current, id, index)),
     addEducation: () => applyEdit(addEducation),
