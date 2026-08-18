@@ -27,7 +27,8 @@ const fetchAuthState = createServerFn({ method: 'GET' }).handler(async () => {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async ({ location }) => {
-    if (location.pathname.startsWith('/sign-in')) return
+    if (location.pathname === '/' || location.pathname.startsWith('/sign-in'))
+      return
     const { isSignedIn } = await fetchAuthState()
     if (!isSignedIn) {
       throw redirect({ to: '/sign-in', search: { redirect: location.href } })
