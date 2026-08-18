@@ -2,9 +2,13 @@ import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
+  redirect,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { ClerkProvider } from '@clerk/tanstack-react-start'
+import { auth as getClerkAuth } from '@clerk/tanstack-react-start/server'
+import { createServerFn } from '@tanstack/react-start'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
@@ -16,7 +20,19 @@ interface MyRouterContext {
   queryClient: QueryClient
 }
 
+const fetchAuthState = createServerFn({ method: 'GET' }).handler(async () => {
+  const auth = await getClerkAuth()
+  return { isSignedIn: Boolean(auth.userId) }
+})
+
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  beforeLoad: async ({ location }) => {
+    if (location.pathname.startsWith('/sign-in')) return
+    const { isSignedIn } = await fetchAuthState()
+    if (!isSignedIn) {
+      throw redirect({ to: '/sign-in', search: { redirect: location.href } })
+    }
+  },
   head: () => ({
     meta: [
       {
@@ -60,26 +76,28 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-            TanStackQueryDevtools,
-          ]}
-        />
-        <Scripts />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <head>
+          <HeadContent />
+        </head>
+        <body>
+          {children}
+          <TanStackDevtools
+            config={{
+              position: 'bottom-right',
+            }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+              TanStackQueryDevtools,
+            ]}
+          />
+          <Scripts />
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
