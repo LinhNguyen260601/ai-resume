@@ -10,10 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UploadRouteImport } from './routes/upload'
-import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SignInIndexRouteImport } from './routes/sign-in/index'
 import { Route as TailorJobIdRouteImport } from './routes/tailor/$jobId'
+import { Route as SignInSplatRouteImport } from './routes/sign-in/$'
 import { Route as JobsNewRouteImport } from './routes/jobs/new'
 import { Route as ExportTailoredCvIdRouteImport } from './routes/export/$tailoredCvId'
 import { Route as EditorTailoredCvIdRouteImport } from './routes/editor/$tailoredCvId'
@@ -21,11 +22,6 @@ import { Route as EditorTailoredCvIdRouteImport } from './routes/editor/$tailore
 const UploadRoute = UploadRouteImport.update({
   id: '/upload',
   path: '/upload',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignInRoute = SignInRouteImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -38,9 +34,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignInIndexRoute = SignInIndexRouteImport.update({
+  id: '/sign-in/',
+  path: '/sign-in/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TailorJobIdRoute = TailorJobIdRouteImport.update({
   id: '/tailor/$jobId',
   path: '/tailor/$jobId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInSplatRoute = SignInSplatRouteImport.update({
+  id: '/sign-in/$',
+  path: '/sign-in/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JobsNewRoute = JobsNewRouteImport.update({
@@ -62,76 +68,83 @@ const EditorTailoredCvIdRoute = EditorTailoredCvIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/sign-in': typeof SignInRoute
   '/upload': typeof UploadRoute
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
   '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
   '/jobs/new': typeof JobsNewRoute
+  '/sign-in/$': typeof SignInSplatRoute
   '/tailor/$jobId': typeof TailorJobIdRoute
+  '/sign-in/': typeof SignInIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/sign-in': typeof SignInRoute
   '/upload': typeof UploadRoute
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
   '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
   '/jobs/new': typeof JobsNewRoute
+  '/sign-in/$': typeof SignInSplatRoute
   '/tailor/$jobId': typeof TailorJobIdRoute
+  '/sign-in': typeof SignInIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/sign-in': typeof SignInRoute
   '/upload': typeof UploadRoute
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
   '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
   '/jobs/new': typeof JobsNewRoute
+  '/sign-in/$': typeof SignInSplatRoute
   '/tailor/$jobId': typeof TailorJobIdRoute
+  '/sign-in/': typeof SignInIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/sign-in'
     | '/upload'
     | '/editor/$tailoredCvId'
     | '/export/$tailoredCvId'
     | '/jobs/new'
+    | '/sign-in/$'
     | '/tailor/$jobId'
+    | '/sign-in/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
-    | '/sign-in'
     | '/upload'
     | '/editor/$tailoredCvId'
     | '/export/$tailoredCvId'
     | '/jobs/new'
+    | '/sign-in/$'
     | '/tailor/$jobId'
+    | '/sign-in'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/sign-in'
     | '/upload'
     | '/editor/$tailoredCvId'
     | '/export/$tailoredCvId'
     | '/jobs/new'
+    | '/sign-in/$'
     | '/tailor/$jobId'
+    | '/sign-in/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
-  SignInRoute: typeof SignInRoute
   UploadRoute: typeof UploadRoute
   EditorTailoredCvIdRoute: typeof EditorTailoredCvIdRoute
   ExportTailoredCvIdRoute: typeof ExportTailoredCvIdRoute
   JobsNewRoute: typeof JobsNewRoute
+  SignInSplatRoute: typeof SignInSplatRoute
   TailorJobIdRoute: typeof TailorJobIdRoute
+  SignInIndexRoute: typeof SignInIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -141,13 +154,6 @@ declare module '@tanstack/react-router' {
       path: '/upload'
       fullPath: '/upload'
       preLoaderRoute: typeof UploadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sign-in': {
-      id: '/sign-in'
-      path: '/sign-in'
-      fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -164,11 +170,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sign-in/': {
+      id: '/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in/'
+      preLoaderRoute: typeof SignInIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tailor/$jobId': {
       id: '/tailor/$jobId'
       path: '/tailor/$jobId'
       fullPath: '/tailor/$jobId'
       preLoaderRoute: typeof TailorJobIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-in/$': {
+      id: '/sign-in/$'
+      path: '/sign-in/$'
+      fullPath: '/sign-in/$'
+      preLoaderRoute: typeof SignInSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/jobs/new': {
@@ -198,12 +218,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
-  SignInRoute: SignInRoute,
   UploadRoute: UploadRoute,
   EditorTailoredCvIdRoute: EditorTailoredCvIdRoute,
   ExportTailoredCvIdRoute: ExportTailoredCvIdRoute,
   JobsNewRoute: JobsNewRoute,
+  SignInSplatRoute: SignInSplatRoute,
   TailorJobIdRoute: TailorJobIdRoute,
+  SignInIndexRoute: SignInIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
