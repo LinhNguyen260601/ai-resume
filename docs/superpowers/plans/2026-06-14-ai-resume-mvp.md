@@ -1129,7 +1129,7 @@ Skipped — this codebase doesn't use sonner anywhere (dropzone and other flows 
 
 ### Task 17: Manual verification
 
-- [ ] **Step 1: End-to-end smoke test**
+- [x] **Step 1: End-to-end smoke test**
 
 1. Upload a text-based PDF CV
 2. Create job via paste
@@ -1137,7 +1137,7 @@ Skipped — this codebase doesn't use sonner anywhere (dropzone and other flows 
 4. Tailor → edit a bullet → confirm auto-save
 5. Switch templates → export PDF → verify layout
 
-- [ ] **Step 2: Run unit tests**
+- [x] **Step 2: Run unit tests**
 
 ```bash
 npm run test
