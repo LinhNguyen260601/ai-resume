@@ -9,7 +9,8 @@ import {
   jobMetaSchema,
   scrapeJobUrlSchema,
 } from '#/lib/schemas/job'
-import { createServerSupabase, getDefaultProfileId } from '#/lib/supabase'
+import { getCurrentProfile } from '#/lib/auth'
+import { createServerSupabase } from '#/lib/supabase'
 import { fetchAndExtractJobText } from '#/lib/url-scrape'
 import { createServerFn } from '@tanstack/react-start'
 
@@ -37,11 +38,12 @@ export const scrapeJobUrl = createServerFn({ method: 'POST' })
 export const createJobPosting = createServerFn({ method: 'POST' })
   .validator(createJobPostingSchema)
   .handler(async ({ data }) => {
+    const profile = await getCurrentProfile()
     const supabase = createServerSupabase()
     const { data: row, error } = await supabase
       .from('job_postings')
       .insert({
-        profile_id: getDefaultProfileId(),
+        profile_id: profile.id,
         source_type: data.source_type,
         source_url: data.source_url ?? null,
         raw_text: data.extracted_text,
@@ -57,11 +59,12 @@ export const createJobPosting = createServerFn({ method: 'POST' })
 
 export const listJobPostings = createServerFn({ method: 'GET' }).handler(
   async () => {
+    const profile = await getCurrentProfile()
     const supabase = createServerSupabase()
     const { data, error } = await supabase
       .from('job_postings')
       .select('*')
-      .eq('profile_id', getDefaultProfileId())
+      .eq('profile_id', profile.id)
       .order('created_at', { ascending: false })
     if (error) throw error
     return data
