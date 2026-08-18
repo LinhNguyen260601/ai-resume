@@ -2,12 +2,14 @@ import { createServerFn } from '@tanstack/react-start'
 import { CV_SCHEMA_DESC, cvContentSchema } from '#/lib/schemas/cv'
 import { tailorCvForJobSchema } from '#/lib/schemas/tailor'
 import { generateStructuredJson } from '#/lib/gemini'
-import { createServerSupabase, getDefaultProfileId } from '#/lib/supabase'
+import { getCurrentProfile } from '#/lib/auth'
+import { createServerSupabase } from '#/lib/supabase'
 import { buildTailorCvPrompt } from '#/lib/tailor-prompt'
 
 export const tailorCvForJob = createServerFn({ method: 'POST' })
   .validator(tailorCvForJobSchema)
   .handler(async ({ data }) => {
+    const profile = await getCurrentProfile()
     const supabase = createServerSupabase()
 
     const [baseCvResult, jobResult] = await Promise.all([
@@ -15,11 +17,13 @@ export const tailorCvForJob = createServerFn({ method: 'POST' })
         .from('base_cvs')
         .select('content')
         .eq('id', data.baseCvId)
+        .eq('profile_id', profile.id)
         .single(),
       supabase
         .from('job_postings')
         .select('extracted_text, company_name, job_title')
         .eq('id', data.jobPostingId)
+        .eq('profile_id', profile.id)
         .single(),
     ])
     if (baseCvResult.error) throw baseCvResult.error
@@ -39,7 +43,7 @@ export const tailorCvForJob = createServerFn({ method: 'POST' })
     const { data: row, error } = await supabase
       .from('tailored_cvs')
       .insert({
-        profile_id: getDefaultProfileId(),
+        profile_id: profile.id,
         base_cv_id: data.baseCvId,
         job_posting_id: data.jobPostingId,
         content,
