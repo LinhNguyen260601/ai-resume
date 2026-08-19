@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SignInIndexRouteImport } from './routes/sign-in/index'
 import { Route as TailorJobIdRouteImport } from './routes/tailor/$jobId'
+import { Route as SignInSplatRouteImport } from './routes/sign-in/$'
 import { Route as JobsNewRouteImport } from './routes/jobs/new'
 import { Route as ExportTailoredCvIdRouteImport } from './routes/export/$tailoredCvId'
 import { Route as EditorTailoredCvIdRouteImport } from './routes/editor/$tailoredCvId'
@@ -32,9 +34,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignInIndexRoute = SignInIndexRouteImport.update({
+  id: '/sign-in/',
+  path: '/sign-in/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TailorJobIdRoute = TailorJobIdRouteImport.update({
   id: '/tailor/$jobId',
   path: '/tailor/$jobId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInSplatRoute = SignInSplatRouteImport.update({
+  id: '/sign-in/$',
+  path: '/sign-in/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JobsNewRoute = JobsNewRouteImport.update({
@@ -60,7 +72,9 @@ export interface FileRoutesByFullPath {
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
   '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
   '/jobs/new': typeof JobsNewRoute
+  '/sign-in/$': typeof SignInSplatRoute
   '/tailor/$jobId': typeof TailorJobIdRoute
+  '/sign-in/': typeof SignInIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,7 +83,9 @@ export interface FileRoutesByTo {
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
   '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
   '/jobs/new': typeof JobsNewRoute
+  '/sign-in/$': typeof SignInSplatRoute
   '/tailor/$jobId': typeof TailorJobIdRoute
+  '/sign-in': typeof SignInIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,7 +95,9 @@ export interface FileRoutesById {
   '/editor/$tailoredCvId': typeof EditorTailoredCvIdRoute
   '/export/$tailoredCvId': typeof ExportTailoredCvIdRoute
   '/jobs/new': typeof JobsNewRoute
+  '/sign-in/$': typeof SignInSplatRoute
   '/tailor/$jobId': typeof TailorJobIdRoute
+  '/sign-in/': typeof SignInIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,7 +108,9 @@ export interface FileRouteTypes {
     | '/editor/$tailoredCvId'
     | '/export/$tailoredCvId'
     | '/jobs/new'
+    | '/sign-in/$'
     | '/tailor/$jobId'
+    | '/sign-in/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -99,7 +119,9 @@ export interface FileRouteTypes {
     | '/editor/$tailoredCvId'
     | '/export/$tailoredCvId'
     | '/jobs/new'
+    | '/sign-in/$'
     | '/tailor/$jobId'
+    | '/sign-in'
   id:
     | '__root__'
     | '/'
@@ -108,7 +130,9 @@ export interface FileRouteTypes {
     | '/editor/$tailoredCvId'
     | '/export/$tailoredCvId'
     | '/jobs/new'
+    | '/sign-in/$'
     | '/tailor/$jobId'
+    | '/sign-in/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,7 +142,9 @@ export interface RootRouteChildren {
   EditorTailoredCvIdRoute: typeof EditorTailoredCvIdRoute
   ExportTailoredCvIdRoute: typeof ExportTailoredCvIdRoute
   JobsNewRoute: typeof JobsNewRoute
+  SignInSplatRoute: typeof SignInSplatRoute
   TailorJobIdRoute: typeof TailorJobIdRoute
+  SignInIndexRoute: typeof SignInIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -144,11 +170,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sign-in/': {
+      id: '/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in/'
+      preLoaderRoute: typeof SignInIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tailor/$jobId': {
       id: '/tailor/$jobId'
       path: '/tailor/$jobId'
       fullPath: '/tailor/$jobId'
       preLoaderRoute: typeof TailorJobIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-in/$': {
+      id: '/sign-in/$'
+      path: '/sign-in/$'
+      fullPath: '/sign-in/$'
+      preLoaderRoute: typeof SignInSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/jobs/new': {
@@ -182,17 +222,20 @@ const rootRouteChildren: RootRouteChildren = {
   EditorTailoredCvIdRoute: EditorTailoredCvIdRoute,
   ExportTailoredCvIdRoute: ExportTailoredCvIdRoute,
   JobsNewRoute: JobsNewRoute,
+  SignInSplatRoute: SignInSplatRoute,
   TailorJobIdRoute: TailorJobIdRoute,
+  SignInIndexRoute: SignInIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

@@ -2,7 +2,8 @@ import { createServerFn } from '@tanstack/react-start'
 import { v4 as uuid } from 'uuid'
 import { CV_SCHEMA_DESC, cvContentSchema } from '#/lib/schemas/cv'
 import { cvUploadSchema } from '#/lib/schemas/cv-upload'
-import { createServerSupabase, getDefaultProfileId } from '#/lib/supabase'
+import { getCurrentProfile } from '#/lib/auth'
+import { createServerSupabase } from '#/lib/supabase'
 import { generateStructuredJson } from '#/lib/gemini'
 import { extractTextFromFile, isLowTextQuality } from '#/lib/pdf-extract'
 
@@ -12,6 +13,8 @@ export async function parseCvUploadFromFormData(data: FormData) {
 }
 
 async function parseCvUploadFile(file: File) {
+  const profile = await getCurrentProfile()
+
   const buffer = Buffer.from(await file.arrayBuffer())
   const rawText = await extractTextFromFile(buffer, file.type)
   if (isLowTextQuality(rawText)) {
@@ -27,10 +30,9 @@ async function parseCvUploadFile(file: File) {
   const content = cvContentSchema.parse(parsed)
 
   const supabase = createServerSupabase()
-  const profileId = getDefaultProfileId()
   const fileId = uuid()
   const ext = file.type === 'application/pdf' ? 'pdf' : 'docx'
-  const filePath = `${profileId}/${fileId}.${ext}`
+  const filePath = `${profile.id}/${fileId}.${ext}`
 
   const { error: uploadError } = await supabase.storage
     .from('cv-uploads')
@@ -40,7 +42,7 @@ async function parseCvUploadFile(file: File) {
   const { data: row, error } = await supabase
     .from('base_cvs')
     .insert({
-      profile_id: profileId,
+      profile_id: profile.id,
       file_path: filePath,
       file_name: file.name,
       content,
@@ -58,11 +60,12 @@ export const parseCvUpload = createServerFn({ method: 'POST' })
 
 export const listBaseCvs = createServerFn({ method: 'GET' }).handler(
   async () => {
+    const profile = await getCurrentProfile()
     const supabase = createServerSupabase()
     const { data, error } = await supabase
       .from('base_cvs')
       .select('id, file_name, content, created_at')
-      .eq('profile_id', getDefaultProfileId())
+      .eq('profile_id', profile.id)
       .order('created_at', { ascending: false })
     if (error) throw error
     return data

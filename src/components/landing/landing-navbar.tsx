@@ -60,11 +60,12 @@ export function LandingNavbar() {
 
         <div className="flex items-center gap-3">
           <Button
+            asChild
             variant="ghost"
             size="sm"
             className="hidden rounded-xl border border-transparent text-muted-foreground hover:border-primary/30 hover:text-foreground sm:inline-flex"
           >
-            Log in
+            <Link to="/sign-in">Log in</Link>
           </Button>
           <Button
             asChild
@@ -118,10 +119,13 @@ export function LandingNavbar() {
           ))}
           <div className="mt-3 flex flex-col gap-2 border-t border-border/40 pt-4">
             <Button
+              asChild
               variant="ghost"
               className="w-full rounded-xl justify-center border border-border/60"
             >
-              Log in
+              <Link to="/sign-in" onClick={() => setMobileOpen(false)}>
+                Log in
+              </Link>
             </Button>
             <Button
               asChild

@@ -23,6 +23,7 @@
     "fixtures:docx": "tsx scripts/create-sample-docx.ts"
   },
   "dependencies": {
+    "@clerk/tanstack-react-start": "^1.5.3",
     "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.110.7",
     "@tailwindcss/vite": "^4.1.18",

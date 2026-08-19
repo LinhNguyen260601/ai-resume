@@ -46,3 +46,6 @@ todos.json
 
 # Git worktrees
 .worktrees/
+
+# clerk configuration (can include secrets)
+/.clerk/
